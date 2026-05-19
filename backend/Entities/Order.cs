@@ -23,5 +23,5 @@ public class Order
     public ICollection<Review> Reviews { get; set; }
     public ICollection<Payment> Payments { get; set; }
     public virtual ICollection<RefundRequest> RefundRequests { get; set; } = new List<RefundRequest>();
-
+    public ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
 }

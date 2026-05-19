@@ -38,7 +38,7 @@ public class OrderController : ControllerBase
 
     [Authorize]
     [HttpPost("{orderId}/pay-again")]
-    public async Task<IActionResult> PayAgain(int orderId)
+    public async Task<IActionResult> PayAgain(long orderId)
     {
         try
         {

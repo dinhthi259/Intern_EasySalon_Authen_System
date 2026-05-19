@@ -8,6 +8,11 @@ using backend.Services.Interfaces;
 using backend.Repositories;
 using backend.Services;
 using PayOS;
+using Hangfire;
+using Hangfire.MySql;
+using MySqlConnector;
+using Hangfire.MySql;
+using Backend.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,6 +46,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         ClockSkew = TimeSpan.Zero
     };
 });
+
+builder.Services.AddHangfire(config =>
+{
+    config.UseStorage(new MySqlStorage(
+    builder.Configuration.GetConnectionString("DefaultConnection"),
+    new MySqlStorageOptions()
+));
+});
+
+builder.Services.AddHangfireServer();
 
 builder.Services.AddSignalR();
 
@@ -121,6 +136,8 @@ builder.Services.AddScoped<IRecommendationService, RecommendationService>();
 builder.Services.AddHostedService<ExpiredPaymentBackgroundService>();
 builder.Services.AddScoped<IBankAccountService, BankAccountService>();
 builder.Services.AddScoped<IRefundService, RefundService>();
+builder.Services.AddScoped<IInvoiceService, InvoiceService>();
+builder.Services.AddScoped<InvoiceEmailService>();
 
 
 builder.Services.Configure<JwtOptions>(
@@ -145,6 +162,7 @@ app.UseCors("ReactApp");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.UseHangfireDashboard();
 
 app.MapHub<NotificationHub>("/notificationHub");
 

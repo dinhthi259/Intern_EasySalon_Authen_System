@@ -21,7 +21,7 @@ public class RefundController : ControllerBase
 
     [HttpPost("orders/{orderId}")]
     public async Task<IActionResult> CreateRefundRequest(
-        int orderId,
+        long orderId,
         CancelPaidOrderRequest request)
     {
         try

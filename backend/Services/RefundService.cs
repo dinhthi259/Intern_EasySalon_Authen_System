@@ -13,8 +13,8 @@ public class RefundService : IRefundService
     }
 
     public async Task CreateRefundRequestAsync(
-        int userId,
-        int orderId,
+        long userId,
+        long orderId,
         CancelPaidOrderRequest request)
     {
         var order = await _context.Orders
@@ -92,7 +92,7 @@ public class RefundService : IRefundService
     }
 
 
-    public async Task ConfirmRefundAsync(int refundId)
+    public async Task ConfirmRefundAsync(long refundId)
     {
         var refund = await _context.RefundRequests
             .FirstOrDefaultAsync(x => x.Id == refundId);
@@ -134,7 +134,7 @@ public class RefundService : IRefundService
 
     }
 
-    public async Task RejectRefundAsync(int refundId, string reason)
+    public async Task RejectRefundAsync(long refundId, string reason)
     {
         var refund = await _context.RefundRequests
             .FirstOrDefaultAsync(x => x.Id == refundId);

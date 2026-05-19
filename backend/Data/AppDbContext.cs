@@ -47,6 +47,8 @@ public class AppDbContext : DbContext
     public DbSet<UserBankAccount> UserBankAccounts { get; set; }
     public DbSet<RefundRequest> RefundRequests { get; set; }
     public DbSet<Notification> Notifications { get; set; }
+    public DbSet<Invoice> Invoices { get; set; }
+    public DbSet<InvoiceItem> InvoiceItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -1062,6 +1064,115 @@ public class AppDbContext : DbContext
             entity.HasOne(x => x.Batch)
                 .WithMany(x => x.ExportItemBatches)
                 .HasForeignKey(x => x.BatchId);
+        });
+        modelBuilder.Entity<Invoice>(entity =>
+        {
+            entity.ToTable("invoices");
+
+            entity.HasKey(x => x.InvoiceId);
+
+            entity.Property(x => x.InvoiceId)
+                .HasColumnName("invoice_id");
+
+            entity.Property(x => x.InvoiceCode)
+                .HasColumnName("invoice_code")
+                .HasMaxLength(100)
+                .IsRequired();
+
+            entity.HasIndex(x => x.InvoiceCode)
+                .IsUnique();
+
+            entity.Property(x => x.OrderId)
+                .HasColumnName("order_id");
+
+            entity.Property(x => x.CustomerName)
+                .HasColumnName("customer_name")
+                .HasMaxLength(255)
+                .IsRequired();
+
+            entity.Property(x => x.CustomerEmail)
+                .HasColumnName("customer_email")
+                .HasMaxLength(255)
+                .IsRequired();
+
+            entity.Property(x => x.TotalAmount)
+                .HasColumnName("total_amount")
+                .HasColumnType("decimal(18,2)")
+                .HasDefaultValue(0);
+
+            entity.Property(x => x.TaxAmount)
+                .HasColumnName("tax_amount")
+                .HasColumnType("decimal(18,2)")
+                .HasDefaultValue(0);
+
+            entity.Property(x => x.FinalAmount)
+                .HasColumnName("final_amount")
+                .HasColumnType("decimal(18,2)")
+                .HasDefaultValue(0);
+
+            entity.Property(x => x.PdfUrl)
+                .HasColumnName("pdf_url")
+                .HasColumnType("text");
+
+            entity.Property(x => x.Status)
+                .HasColumnName("status")
+                .HasMaxLength(50)
+                .HasDefaultValue("Created");
+
+            entity.Property(x => x.CreatedAt)
+                .HasColumnName("created_at")
+                .HasColumnType("timestamp")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            entity.Property(x => x.SentAt)
+                .HasColumnName("sent_at")
+                .HasColumnType("datetime");
+
+            entity.HasOne(x => x.Order)
+                .WithMany(o => o.Invoices)
+                .HasForeignKey(x => x.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasMany(x => x.InvoiceItems)
+                .WithOne(x => x.Invoice)
+                .HasForeignKey(x => x.InvoiceId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+        modelBuilder.Entity<InvoiceItem>(entity =>
+        {
+            entity.ToTable("invoice_items");
+
+            entity.HasKey(x => x.InvoiceItemId);
+
+            entity.Property(x => x.InvoiceItemId)
+                .HasColumnName("invoice_item_id");
+
+            entity.Property(x => x.InvoiceId)
+                .HasColumnName("invoice_id");
+
+            entity.Property(x => x.ProductName)
+                .HasColumnName("product_name")
+                .HasMaxLength(255)
+                .IsRequired();
+
+            entity.Property(x => x.Quantity)
+                .HasColumnName("quantity")
+                .HasDefaultValue(1);
+
+            entity.Property(x => x.UnitPrice)
+                .HasColumnName("unit_price")
+                .HasColumnType("decimal(18,2)")
+                .HasDefaultValue(0);
+
+            entity.Property(x => x.TotalPrice)
+                .HasColumnName("total_price")
+                .HasColumnType("decimal(18,2)")
+                .HasDefaultValue(0);
+
+            entity.HasOne(x => x.Invoice)
+                .WithMany(x => x.InvoiceItems)
+                .HasForeignKey(x => x.InvoiceId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
     }
 }

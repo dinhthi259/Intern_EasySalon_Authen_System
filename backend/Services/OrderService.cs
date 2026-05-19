@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using Hangfire;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using PayOS;
@@ -13,7 +14,8 @@ public class OrderService : IOrderService
     private readonly PayOSClient _payOS;
     private readonly IConfiguration _configuration;
     private readonly IHubContext<NotificationHub> _hubContext;
-    public OrderService(IOrderRepository orderRepository, AppDbContext context, IInventoryDocumentService service, PayOSClient payOS, IConfiguration configuration, IHubContext<NotificationHub> hubContext)
+    private readonly IInvoiceService _invoiceService;
+    public OrderService(IOrderRepository orderRepository, AppDbContext context, IInventoryDocumentService service, PayOSClient payOS, IConfiguration configuration, IHubContext<NotificationHub> hubContext, IInvoiceService invoiceService)
     {
         _orderRepository = orderRepository;
         _context = context;
@@ -21,6 +23,7 @@ public class OrderService : IOrderService
         _payOS = payOS;
         _configuration = configuration;
         _hubContext = hubContext;
+        _invoiceService = invoiceService;
     }
 
     public async Task<CreateOrderResponseDto> CreateOrderAsync(CreateOrderRequest request)
@@ -303,7 +306,7 @@ public class OrderService : IOrderService
         }
     }
 
-    public async Task<PayAgainResponseDto> PayAgainAsync(int orderId)
+    public async Task<PayAgainResponseDto> PayAgainAsync(long orderId)
     {
         var order = await _context.Orders
             .FirstOrDefaultAsync(x => x.Id == orderId);
@@ -501,7 +504,14 @@ public class OrderService : IOrderService
     {
         using var transaction = await _context.Database.BeginTransactionAsync();
 
-        var order = await _context.Orders.FindAsync(orderId);
+        var order = await _context.Orders
+    .Include(o => o.Payments)
+    .Include(o => o.OrderItems)
+        .ThenInclude(oi => oi.Product)
+    .Include(o => o.User)
+        .ThenInclude(u => u.Profile)
+    .Include(o => o.Address)
+    .FirstOrDefaultAsync(o => o.Id == orderId);
         if (order == null)
             throw new Exception("Order not found");
 
@@ -560,6 +570,12 @@ public class OrderService : IOrderService
             order.PaymentStatus = "Đã thanh toán";
             order.Payments.FirstOrDefault(p => p.Status == "Pending").Status = "Paid";
             order.CompletedAt = DateTime.Now;
+            var invoice = await _invoiceService.CreateInvoiceAsync(order.Id);
+
+            // 3. Gửi mail hóa đơn
+            BackgroundJob.Enqueue<InvoiceEmailService>(
+                x => x.SendInvoiceEmailAsync(invoice.InvoiceId)
+            );
             var inventoryExport = await _context.InventoryExports
                 .FirstOrDefaultAsync(x =>
                     x.ExportType == "ORDER" &&
