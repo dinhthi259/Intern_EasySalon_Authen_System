@@ -138,6 +138,7 @@ builder.Services.AddScoped<IBankAccountService, BankAccountService>();
 builder.Services.AddScoped<IRefundService, RefundService>();
 builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 builder.Services.AddScoped<InvoiceEmailService>();
+builder.Services.AddScoped<ITaxService, TaxService>();
 
 
 builder.Services.Configure<JwtOptions>(

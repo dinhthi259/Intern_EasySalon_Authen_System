@@ -49,6 +49,8 @@ public class AppDbContext : DbContext
     public DbSet<Notification> Notifications { get; set; }
     public DbSet<Invoice> Invoices { get; set; }
     public DbSet<InvoiceItem> InvoiceItems { get; set; }
+    public DbSet<TaxDeclaration> TaxDeclarations { get; set; }
+    public DbSet<TaxDeclarationDetail> TaxDeclarationDetails { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -1118,6 +1120,13 @@ public class AppDbContext : DbContext
                 .HasColumnName("status")
                 .HasMaxLength(50)
                 .HasDefaultValue("Created");
+            
+            entity.Property(x => x.TaxDeclarationId)
+                .HasColumnName("tax_declaration_id");
+            
+            entity.Property(x => x.TaxDeclared)
+                .HasColumnName("tax_declared")
+                .HasDefaultValue(false);
 
             entity.Property(x => x.CreatedAt)
                 .HasColumnName("created_at")
@@ -1137,6 +1146,10 @@ public class AppDbContext : DbContext
                 .WithOne(x => x.Invoice)
                 .HasForeignKey(x => x.InvoiceId)
                 .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(x => x.TaxDeclaration)
+                .WithMany(t => t.Invoices)
+                .HasForeignKey(x => x.TaxDeclarationId)
+                .OnDelete(DeleteBehavior.SetNull);
         });
         modelBuilder.Entity<InvoiceItem>(entity =>
         {
@@ -1173,6 +1186,139 @@ public class AppDbContext : DbContext
                 .WithMany(x => x.InvoiceItems)
                 .HasForeignKey(x => x.InvoiceId)
                 .OnDelete(DeleteBehavior.Cascade);
+        });
+        modelBuilder.Entity<TaxDeclaration>(entity =>
+        {
+            entity.ToTable("tax_declarations");
+
+            entity.HasKey(x => x.TaxDeclarationId);
+
+            entity.Property(x => x.TaxDeclarationId)
+                .HasColumnName("tax_declaration_id");
+
+            entity.Property(x => x.DeclarationCode)
+                .HasColumnName("declaration_code")
+                .HasMaxLength(100)
+                .IsRequired();
+
+            entity.HasIndex(x => x.DeclarationCode)
+                .IsUnique();
+
+            entity.Property(x => x.PeriodType)
+                .HasColumnName("period_type")
+                .HasMaxLength(20)
+                .IsRequired();
+
+            entity.Property(x => x.Month)
+                .HasColumnName("month");
+
+            entity.Property(x => x.Quarter)
+                .HasColumnName("quarter");
+
+            entity.Property(x => x.Year)
+                .HasColumnName("year")
+                .IsRequired();
+
+            entity.Property(x => x.TotalRevenue)
+                .HasColumnName("total_revenue")
+                .HasColumnType("decimal(18,2)")
+                .HasDefaultValue(0)
+                .IsRequired();
+
+            entity.Property(x => x.TotalTaxAmount)
+                .HasColumnName("total_tax_amount")
+                .HasColumnType("decimal(18,2)")
+                .HasDefaultValue(0)
+                .IsRequired();
+
+            entity.Property(x => x.TotalFinalAmount)
+                .HasColumnName("total_final_amount")
+                .HasColumnType("decimal(18,2)")
+                .HasDefaultValue(0)
+                .IsRequired();
+
+            entity.Property(x => x.TotalInvoice)
+                .HasColumnName("total_invoice")
+                .HasDefaultValue(0)
+                .IsRequired();
+
+            entity.Property(x => x.Status)
+                .HasColumnName("status")
+                .HasMaxLength(50)
+                .HasDefaultValue("Draft")
+                .IsRequired();
+
+            entity.Property(x => x.Note)
+                .HasColumnName("note")
+                .HasColumnType("text");
+
+            entity.Property(x => x.CreatedAt)
+                .HasColumnName("created_at")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            entity.Property(x => x.ApprovedAt)
+                .HasColumnName("approved_at");
+        });
+        modelBuilder.Entity<TaxDeclarationDetail>(entity =>
+        {
+            entity.ToTable("tax_declaration_details");
+
+            entity.HasKey(x => x.TaxDeclarationDetailId);
+
+            entity.Property(x => x.TaxDeclarationDetailId)
+                .HasColumnName("tax_declaration_detail_id");
+
+            entity.Property(x => x.TaxDeclarationId)
+                .HasColumnName("tax_declaration_id")
+                .IsRequired();
+
+            entity.Property(x => x.InvoiceId)
+                .HasColumnName("invoice_id")
+                .IsRequired();
+
+            entity.Property(x => x.InvoiceCode)
+                .HasColumnName("invoice_code")
+                .HasMaxLength(100)
+                .IsRequired();
+
+            entity.Property(x => x.CustomerName)
+                .HasColumnName("customer_name")
+                .HasMaxLength(255)
+                .IsRequired();
+
+            entity.Property(x => x.RevenueAmount)
+                .HasColumnName("revenue_amount")
+                .HasColumnType("decimal(18,2)")
+                .HasDefaultValue(0)
+                .IsRequired();
+
+            entity.Property(x => x.TaxAmount)
+                .HasColumnName("tax_amount")
+                .HasColumnType("decimal(18,2)")
+                .HasDefaultValue(0)
+                .IsRequired();
+
+            entity.Property(x => x.FinalAmount)
+                .HasColumnName("final_amount")
+                .HasColumnType("decimal(18,2)")
+                .HasDefaultValue(0)
+                .IsRequired();
+
+            entity.Property(x => x.InvoiceCreatedAt)
+                .HasColumnName("invoice_created_at")
+                .IsRequired();
+
+            // 🔗 Relation TaxDeclaration
+            entity.HasOne(x => x.TaxDeclaration)
+                .WithMany(t => t.TaxDeclarationDetails)
+                .HasForeignKey(x => x.TaxDeclarationId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // 🔗 Relation Invoice
+            entity.HasOne(x => x.Invoice)
+                .WithMany(i => i.TaxDeclarationDetails)
+                .HasForeignKey(x => x.InvoiceId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }

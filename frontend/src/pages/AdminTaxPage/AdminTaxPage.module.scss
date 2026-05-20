@@ -1,0 +1,79 @@
+.tax-page {
+  padding: 24px;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+.tax-header {
+  background: linear-gradient(135deg, #59c241, #47a832);
+  color: #fff;
+  padding: 28px 32px;
+  border-radius: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 24px rgba(89, 194, 65, 0.25);
+
+  h2 {
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+
+  p {
+    font-size: 15px;
+    opacity: 0.92;
+  }
+}
+
+.tax-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #374151;
+  padding: 12px 18px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+
+  &:hover {
+    border-color: #59c241;
+    color: #59c241;
+    transform: translateY(-2px);
+  }
+
+  &.active {
+    background: #59c241;
+    border-color: #59c241;
+    color: #fff;
+    box-shadow: 0 6px 16px rgba(89, 194, 65, 0.25);
+  }
+}
+
+@media (max-width: 768px) {
+  .tax-page {
+    padding: 16px;
+  }
+
+  .tax-header {
+    padding: 22px;
+
+    h2 {
+      font-size: 22px;
+    }
+  }
+
+  .tax-tabs {
+    flex-direction: column;
+  }
+
+  .tab-btn {
+    width: 100%;
+  }
+}

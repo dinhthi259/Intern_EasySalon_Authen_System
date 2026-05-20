@@ -32,10 +32,11 @@ import StatisticsDashboard from "../components/Dashboard/Statistics/StatisticsDa
 import PaymentCancelPage from "../pages/PaymentPage/PaymentCancelPage";
 import PaymentSuccessPage from "../pages/PaymentPage/PaymentSuccessPage";
 import BankAccountPage from "../pages/BankAccountPage";
+import AdminInvoicePage from "../pages/AdminInvoicePage";
+import AdminTaxPage from "../pages/AdminTaxPage";
 
 import { ProtectedRoute } from "./Routes";
 import { AdminRoute } from "./Routes";
-
 const routes = [
   {
     path: "/",
@@ -217,6 +218,20 @@ const routes = [
   {
     path: "/admin/dashboard",
     component: StatisticsDashboard,
+    layout: AdminLayout,
+    ProtectedRoute: true,
+    AdminRoute: true
+  },
+  {
+    path: "/admin/documents/invoices",
+    component: AdminInvoicePage,
+    layout: AdminLayout,
+    ProtectedRoute: true,
+    AdminRoute: true
+  },
+  {
+    path: "/admin/documents/tax-declarations",
+    component: AdminTaxPage,
     layout: AdminLayout,
     ProtectedRoute: true,
     AdminRoute: true

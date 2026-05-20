@@ -10,8 +10,11 @@ import {
   FaWarehouse,
   FaUsers,
   FaChartBar,
-  FaBars,
   FaTruck,
+  FaFileInvoice,
+  FaFileAlt,
+  FaChevronDown,
+  FaChevronRight,
 } from "react-icons/fa";
 import { BiSolidCommentDetail } from "react-icons/bi";
 
@@ -19,6 +22,7 @@ const cx = classNames.bind(styles);
 
 export default function SidebarAdmin() {
   const [collapsed, setCollapsed] = useState(false);
+  const [openDocumentMenu, setOpenDocumentMenu] = useState(false);
 
   const menu = [
     { name: "Quản lý danh mục", path: "/admin/category", icon: <FaList /> },
@@ -29,29 +33,81 @@ export default function SidebarAdmin() {
     { name: "Quản lý nhà cung cấp", path: "/admin/suppliers", icon: <FaTruck /> },
     { name: "Quản lý đánh giá", path: "/admin/review", icon: <BiSolidCommentDetail /> },
     { name: "Báo cáo thống kê", path: "/admin/dashboard", icon: <FaChartBar /> },
-    { name: "Về trang chủ", path: "/", icon: <RiLogoutBoxLine /> },
   ];
 
   return (
     <div className={cx("sidebar", { collapsed })}>
-      {/* Toggle button (mobile) */}
-     <div className={cx("logo")}>
-      <img src="https://www.techai.ai/logo.png" alt="logo" height="40" />
-    </div>
+      <div className={cx("logo")}>
+        <img src="https://www.techai.ai/logo.png" alt="logo" height="40" />
+      </div>
 
       <div className={cx("menu")}>
         {menu.map((item, index) => (
           <NavLink
             key={index}
             to={item.path}
-            className={({ isActive }) =>
-              cx("item", { active: isActive })
-            }
+            className={({ isActive }) => cx("item", { active: isActive })}
           >
             <span className={cx("icon")}>{item.icon}</span>
             {!collapsed && <span className={cx("text")}>{item.name}</span>}
           </NavLink>
         ))}
+
+        <div
+          className={cx("item", "parentItem")}
+          onClick={() => setOpenDocumentMenu(!openDocumentMenu)}
+        >
+          <span className={cx("icon")}>
+            <FaFileAlt />
+          </span>
+
+          {!collapsed && (
+            <>
+              <span className={cx("text")}>Quản lý giấy tờ</span>
+              <span className={cx("arrow")}>
+                {openDocumentMenu ? <FaChevronDown /> : <FaChevronRight />}
+              </span>
+            </>
+          )}
+        </div>
+
+        {openDocumentMenu && !collapsed && (
+          <div className={cx("submenu")}>
+            <NavLink
+              to="/admin/documents/invoices"
+              className={({ isActive }) => cx("subItem", { active: isActive })}
+            >
+              <FaFileInvoice />
+              <span>Quản lý hóa đơn</span>
+            </NavLink>
+
+            <NavLink
+              to="/admin/documents/tax-declarations"
+              className={({ isActive }) => cx("subItem", { active: isActive })}
+            >
+              <FaFileAlt />
+              <span>Quản lý tờ kê khai thuế</span>
+            </NavLink>
+
+            <NavLink
+              to="/admin/documents/warehouse-slips"
+              className={({ isActive }) => cx("subItem", { active: isActive })}
+            >
+              <FaWarehouse />
+              <span>Quản lý phiếu kho</span>
+            </NavLink>
+          </div>
+        )}
+
+        <NavLink
+          to="/"
+          className={({ isActive }) => cx("item", { active: isActive })}
+        >
+          <span className={cx("icon")}>
+            <RiLogoutBoxLine />
+          </span>
+          {!collapsed && <span className={cx("text")}>Về trang chủ</span>}
+        </NavLink>
       </div>
     </div>
   );

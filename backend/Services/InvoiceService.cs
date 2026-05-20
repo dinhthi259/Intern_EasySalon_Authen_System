@@ -34,8 +34,8 @@ public class InvoiceService : IInvoiceService
         if (existedInvoice != null)
             return existedInvoice;
 
-        var taxAmount = order.TotalAmount * 0.08m;
-        var finalAmount = order.TotalAmount + taxAmount;
+        var taxAmount = 0;
+        var finalAmount = order.TotalAmount;
 
         var invoice = new Invoice
         {

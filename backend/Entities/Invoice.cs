@@ -2,13 +2,13 @@ public class Invoice
 {
     public long InvoiceId { get; set; }
 
-    public string InvoiceCode { get; set; } = string.Empty;
+    public string InvoiceCode { get; set; } = "";
 
     public long OrderId { get; set; }
 
-    public string CustomerName { get; set; } = string.Empty;
+    public string CustomerName { get; set; } = "";
 
-    public string CustomerEmail { get; set; } = string.Empty;
+    public string CustomerEmail { get; set; } = "";
 
     public decimal TotalAmount { get; set; }
 
@@ -16,15 +16,27 @@ public class Invoice
 
     public decimal FinalAmount { get; set; }
 
-    public string PdfUrl { get; set; } = string.Empty;
+    public string? PdfUrl { get; set; }
 
     public string Status { get; set; } = "Created";
 
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public bool TaxDeclared { get; set; } = false;
+
+    public long? TaxDeclarationId { get; set; }
+
+    public DateTime CreatedAt { get; set; }
 
     public DateTime? SentAt { get; set; }
 
-    public Order? Order { get; set; }
 
-    public ICollection<InvoiceItem> InvoiceItems { get; set; } = new List<InvoiceItem>();
+    // Navigation Properties
+    public virtual Order? Order { get; set; }
+
+    public virtual TaxDeclaration? TaxDeclaration { get; set; }
+
+    public virtual ICollection<InvoiceItem> InvoiceItems { get; set; }
+        = new List<InvoiceItem>();
+
+    public virtual ICollection<TaxDeclarationDetail> TaxDeclarationDetails { get; set; }
+        = new List<TaxDeclarationDetail>();
 }
