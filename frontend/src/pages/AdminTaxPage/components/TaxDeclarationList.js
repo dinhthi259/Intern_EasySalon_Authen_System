@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import classNames from "classnames/bind";
 import styles from "./TaxDeclarationList.module.scss";
-import { getDeclarations } from "../../../api/TaxApi";
+import { getDeclarations, deleteDeclaration } from "../../../api/TaxApi";
+import ConfirmDialog from "../../../components/ConfirmDialog";
+import { FaTrash } from "react-icons/fa";
 
 const cx = classNames.bind(styles);
 
 export default function TaxDeclarationList({ onView }) {
   const [data, setData] = useState([]);
+  const [confirmDelete, setConfirmDelete] = useState({ open: false, id: null });
 
   const loadData = async () => {
     const res = await getDeclarations();
@@ -16,6 +19,17 @@ export default function TaxDeclarationList({ onView }) {
   useEffect(() => {
     loadData();
   }, []);
+
+  const handleAskDelete = (id) => {
+    setConfirmDelete({ open: true, id });
+  };
+
+  const handleDelete = async (id) => {
+    if (id) {
+      await deleteDeclaration(id);
+      setConfirmDelete({ open: false, id: null });
+    }
+  };
 
   return (
     <div className={cx("wrapper")}>
@@ -67,23 +81,28 @@ export default function TaxDeclarationList({ onView }) {
                   </td>
 
                   <td>
-                    <span
-                      className={cx(
-                        "status",
-                        item.status?.toLowerCase()
-                      )}
-                    >
+                    <span className={cx("status", item.status?.toLowerCase())}>
                       {item.status}
                     </span>
                   </td>
 
                   <td>
-                    <button
-                      className={cx("view-btn")}
-                      onClick={() => onView(item.taxDeclarationId)}
-                    >
-                      Xem tờ khai
-                    </button>
+                    <div className={cx("actions")}>
+                      <button
+                        className={cx("view-btn")}
+                        onClick={() => onView(item.taxDeclarationId)}
+                      >
+                        Xem tờ khai
+                      </button>
+                      {item.status === "Draft" && (
+                        <button
+                          className={cx("delete-btn")}
+                          onClick={() => handleAskDelete(item.taxDeclarationId)}
+                        >
+                          <FaTrash />
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))
@@ -97,6 +116,15 @@ export default function TaxDeclarationList({ onView }) {
           </tbody>
         </table>
       </div>
+      <ConfirmDialog
+        open={confirmDelete.open}
+        title="Xóa tờ khai"
+        message="Bạn có chắc muốn xóa tờ khai này?"
+        confirmText="Xác nhận"
+        cancelText="Hủy"
+        onConfirm={() => handleDelete(confirmDelete.id)}
+        onCancel={() => setConfirmDelete({ open: false, id: null })}
+      />
     </div>
   );
 }

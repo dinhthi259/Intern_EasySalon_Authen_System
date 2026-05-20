@@ -26,3 +26,7 @@ export const getUnreportedInvoices = (params) =>{
 export const generateDeclaration = (data) =>{
     return api.post("/tax/declarations/generate", data);
 }
+
+export const deleteDeclaration = async (id) => {
+  return await api.delete(`/tax/${id}`);
+};

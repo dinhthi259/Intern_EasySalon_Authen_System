@@ -52,4 +52,22 @@ public class TaxController : ControllerBase
         var result = await _taxService.ApproveDeclarationAsync(id);
         return Ok(new { success = result });
     }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(long id)
+    {
+        var result = await _taxService.DeleteDeclarationAsync(id);
+
+        if (!result)
+        {
+            return BadRequest(new
+            {
+                message = "Không thể xóa tờ khai."
+            });
+        }
+
+        return Ok(new
+        {
+            message = "Xóa tờ khai thành công."
+        });
+    }
 }

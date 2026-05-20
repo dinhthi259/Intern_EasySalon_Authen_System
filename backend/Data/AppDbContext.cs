@@ -653,21 +653,26 @@ public class AppDbContext : DbContext
 
             entity.Property(x => x.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
             entity.Property(x => x.ApprovedAt).HasColumnName("approved_at");
+            entity.Property(x => x.TaxDeclarationId).HasColumnName("tax_declaration_id");
+            entity.Property(x => x.TaxDeclared).HasColumnName("tax_declared").HasDefaultValue(false);
 
             entity.HasOne(x => x.Supplier)
                 .WithMany(x => x.Imports)
                 .HasForeignKey(x => x.SupplierId)
                 .OnDelete(DeleteBehavior.SetNull);
-            modelBuilder.Entity<InventoryImport>()
-    .HasOne(x => x.CreatedByUser)
-    .WithMany()
-    .HasForeignKey(x => x.CreatedBy)
-    .OnDelete(DeleteBehavior.SetNull);
+            entity.HasOne(x => x.CreatedByUser)
+                .WithMany()
+                .HasForeignKey(x => x.CreatedBy)
+                .OnDelete(DeleteBehavior.SetNull);
 
-            modelBuilder.Entity<InventoryImport>()
-                .HasOne(x => x.ApprovedByUser)
+            entity.HasOne(x => x.ApprovedByUser)
                 .WithMany()
                 .HasForeignKey(x => x.ApprovedBy)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            entity.HasOne(x => x.TaxDeclaration)
+                .WithMany(x => x.InventoryImports)
+                .HasForeignKey(x => x.TaxDeclarationId)
                 .OnDelete(DeleteBehavior.SetNull);
         });
 
@@ -1120,10 +1125,10 @@ public class AppDbContext : DbContext
                 .HasColumnName("status")
                 .HasMaxLength(50)
                 .HasDefaultValue("Created");
-            
+
             entity.Property(x => x.TaxDeclarationId)
                 .HasColumnName("tax_declaration_id");
-            
+
             entity.Property(x => x.TaxDeclared)
                 .HasColumnName("tax_declared")
                 .HasDefaultValue(false);
@@ -1241,6 +1246,36 @@ public class AppDbContext : DbContext
                 .HasColumnName("total_invoice")
                 .HasDefaultValue(0)
                 .IsRequired();
+            entity.Property(x => x.PurchaseTaxAmount)
+                .HasColumnName("purchase_tax_amount")
+                .HasColumnType("decimal(18,2)")
+                .HasDefaultValue(0)
+                .IsRequired();
+            entity.Property(x => x.DeductibleTaxAmount)
+                .HasColumnName("deductible_tax_amount")
+                .HasColumnType("decimal(18,2)")
+                .HasDefaultValue(0)
+                .IsRequired();
+            entity.Property(x => x.PurchaseAmount)
+                .HasColumnName("purchase_amount")
+                .HasColumnType("decimal(18,2)")
+                .HasDefaultValue(0)
+                .IsRequired();
+            entity.Property(x => x.PreviousDeductibleTax)
+                .HasColumnName("previous_deductible_tax")
+                .HasColumnType("decimal(18,2)")
+                .HasDefaultValue(0)
+                .IsRequired();
+            entity.Property(x => x.VatPayable)
+                .HasColumnName("vat_payable")
+                .HasColumnType("decimal(18,2)")
+                .HasDefaultValue(0)
+                .IsRequired();
+            entity.Property(x => x.VatCarriedForward)
+                .HasColumnName("vat_carried_forward")
+                .HasColumnType("decimal(18,2)")
+                .HasDefaultValue(0)
+                .IsRequired();
 
             entity.Property(x => x.Status)
                 .HasColumnName("status")
@@ -1274,7 +1309,7 @@ public class AppDbContext : DbContext
 
             entity.Property(x => x.InvoiceId)
                 .HasColumnName("invoice_id")
-                .IsRequired();
+                .IsRequired(false);
 
             entity.Property(x => x.InvoiceCode)
                 .HasColumnName("invoice_code")
@@ -1308,6 +1343,33 @@ public class AppDbContext : DbContext
                 .HasColumnName("invoice_created_at")
                 .IsRequired();
 
+            entity.Property(x => x.ImportId)
+                .HasColumnName("import_id")
+                .IsRequired(false);
+
+            entity.Property(x => x.ImportCode)
+                .HasColumnName("import_code")
+                .HasMaxLength(100)
+                .IsRequired();
+            entity.Property(x => x.PurchaseAmount)
+                .HasColumnName("purchase_amount")
+                .HasColumnType("decimal(18,2)")
+                .HasDefaultValue(0)
+                .IsRequired();
+            entity.Property(x => x.PurchaseTaxAmount)
+                .HasColumnName("purchase_tax_amount")
+                .HasColumnType("decimal(18,2)")
+                .HasDefaultValue(0)
+                .IsRequired();
+            entity.Property(x => x.PurchaseFinalAmount)
+                .HasColumnName("purchase_final_amount")
+                .HasColumnType("decimal(18,2)")
+                .HasDefaultValue(0)
+                .IsRequired();
+            entity.Property(x => x.ImportCreatedAt)
+                .HasColumnName("import_created_at")
+                .IsRequired();
+        
             // 🔗 Relation TaxDeclaration
             entity.HasOne(x => x.TaxDeclaration)
                 .WithMany(t => t.TaxDeclarationDetails)
@@ -1316,8 +1378,13 @@ public class AppDbContext : DbContext
 
             // 🔗 Relation Invoice
             entity.HasOne(x => x.Invoice)
-                .WithMany(i => i.TaxDeclarationDetails)
+                .WithMany(x => x.TaxDeclarationDetails)
                 .HasForeignKey(x => x.InvoiceId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(x => x.InventoryImports)
+                .WithMany(x => x.TaxDeclarationDetails)
+                .HasForeignKey(x => x.ImportId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
     }

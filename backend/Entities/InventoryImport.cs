@@ -22,5 +22,12 @@
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime? ApprovedAt { get; set; }
 
+        public bool TaxDeclared { get; set; } = false;
+        public long? TaxDeclarationId { get; set; }
+
+        public TaxDeclaration? TaxDeclaration { get; set; }
+
         public ICollection<InventoryImportItem> Items { get; set; } = new List<InventoryImportItem>();
+        public virtual ICollection<TaxDeclarationDetail> TaxDeclarationDetails { get; set; }
+        = new List<TaxDeclarationDetail>();
     }

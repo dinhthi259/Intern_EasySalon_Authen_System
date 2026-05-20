@@ -137,6 +137,34 @@
   }
 }
 
+.delete-btn {
+  border: none;
+  outline: none;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(89, 194, 65, 0.25);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
 .empty {
   text-align: center;
   padding: 40px 20px !important;

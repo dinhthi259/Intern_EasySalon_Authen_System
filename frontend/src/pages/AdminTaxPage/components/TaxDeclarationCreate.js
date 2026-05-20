@@ -2,6 +2,7 @@ import { useState } from "react";
 import classNames from "classnames/bind";
 import styles from "./TaxDeclarationCreate.module.scss";
 import { generateDeclaration } from "../../../api/TaxApi";
+import { notifyError, notifySuccess } from "../../../components/Nofitication";
 
 const cx = classNames.bind(styles);
 
@@ -30,9 +31,15 @@ export default function TaxDeclarationCreate({ onCreated }) {
       note: form.note,
     };
 
-    await generateDeclaration(payload);
-    alert("Tạo tờ khai thuế thành công!");
-    onCreated();
+    try {
+      const res = await generateDeclaration(payload);
+      if (res.success) {
+        notifySuccess("Tạo tờ khai thuế thành công!");
+        onCreated();
+      }
+    } catch (error) {
+      notifyError(error.res?.data?.message || "Tạo tờ khai thuế thất bại!");
+    }
   };
 
   return (
@@ -64,7 +71,7 @@ export default function TaxDeclarationCreate({ onCreated }) {
               value={form.month}
               onChange={handleChange}
             >
-              {[1,2,3,4,5,6,7,8,9,10,11,12].map((m) => (
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((m) => (
                 <option key={m} value={m}>
                   Tháng {m}
                 </option>

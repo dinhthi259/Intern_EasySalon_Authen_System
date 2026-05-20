@@ -18,8 +18,17 @@ public class TaxDeclaration
 
     public DateTime CreatedAt { get; set; }
     public DateTime? ApprovedAt { get; set; }
+    public decimal PurchaseAmount { get; set; }
+    public decimal PurchaseTaxAmount { get; set; }
+    public decimal DeductibleTaxAmount { get; set; }
+
+    public decimal PreviousDeductibleTax { get; set; }
+    public decimal VatPayable { get; set; }
+    public decimal VatCarriedForward { get; set; }
 
     public List<TaxDeclarationDetail> TaxDeclarationDetails { get; set; } = new();
+    public virtual ICollection<InventoryImport> InventoryImports { get; set; }
+        = new List<InventoryImport>();
     public virtual ICollection<Invoice> Invoices { get; set; }
         = new List<Invoice>();
 

@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { approveDeclaration, getDeclarationDetail } from "../../../api/TaxApi";
+import {
+  approveDeclaration,
+  deleteDeclaration,
+  getDeclarationDetail,
+} from "../../../api/TaxApi";
 import styles from "./TaxDeclarationDetail.module.scss";
 import classNames from "classnames/bind";
 
@@ -29,12 +33,16 @@ export default function TaxDeclarationDetail({ id, onBack }) {
 
   if (!data) return <p>Đang tải...</p>;
 
-  const ct21 = data.totalInvoice === 0 ? "X" : "";
+  const hasSale = Number(data.totalInvoice || 0) > 0;
+  const hasPurchase = Number(data.purchaseAmount || 0) > 0;
 
-  const ct22 = 0;
-  const ct23 = 0;
-  const ct24 = 0;
-  const ct25 = 0;
+  const ct21 = !hasSale && !hasPurchase ? "X" : "";
+
+  const ct22 = data.previousDeductibleTax || 0;
+
+  const ct23 = data.purchaseAmount || 0;
+  const ct24 = data.purchaseTaxAmount || 0;
+  const ct25 = data.deductibleTaxAmount || 0;
 
   const ct26 = 0;
 
@@ -62,11 +70,12 @@ export default function TaxDeclarationDetail({ id, onBack }) {
   const temp40a = ct36 - ct22 + ct37 - ct38 - ct39a;
   const ct40a = temp40a > 0 ? temp40a : 0;
   const ct40b = 0;
-  const ct40 = ct40a - ct40b;
+  const ct40 = data.vatPayable ?? ct40a;
 
   const ct41 = temp40a < 0 ? Math.abs(temp40a) : 0;
   const ct42 = 0;
-  const ct43 = ct41 - ct42;
+
+  const ct43 = data.vatCarriedForward ?? ct41 - ct42;
 
   return (
     <div className={cx("tax-detail-page")}>
@@ -132,10 +141,12 @@ export default function TaxDeclarationDetail({ id, onBack }) {
             <b>[05] Mã số thuế:</b> 0112233
           </p>
           <p>
-            <b>[06] Tên đại lý thuế nếu có:</b> ........................................
+            <b>[06] Tên đại lý thuế nếu có:</b>{" "}
+            ........................................
           </p>
           <p>
-            <b>[07] Mã số thuế:</b> .....................................................
+            <b>[07] Mã số thuế:</b>{" "}
+            .....................................................
           </p>
           <p>
             <b>[08] Hợp đồng đại lý thuế:</b> Số ........ ngày ........
@@ -188,9 +199,7 @@ export default function TaxDeclarationDetail({ id, onBack }) {
 
             <tr className={cx("section-row")}>
               <td>C</td>
-              <td colSpan="4">
-                Kê khai thuế GTGT phải nộp ngân sách nhà nước
-              </td>
+              <td colSpan="4">Kê khai thuế GTGT phải nộp ngân sách nhà nước</td>
             </tr>
 
             <tr className={cx("section-row")}>
@@ -200,9 +209,7 @@ export default function TaxDeclarationDetail({ id, onBack }) {
 
             <tr>
               <td>1</td>
-              <td>
-                Giá trị và thuế GTGT của hàng hóa, dịch vụ mua vào
-              </td>
+              <td>Giá trị và thuế GTGT của hàng hóa, dịch vụ mua vào</td>
               <td>
                 [23]
                 <br />
@@ -361,9 +368,7 @@ export default function TaxDeclarationDetail({ id, onBack }) {
 
             <tr className={cx("section-row")}>
               <td>VI</td>
-              <td colSpan="4">
-                Xác định nghĩa vụ thuế GTGT phải nộp trong kỳ
-              </td>
+              <td colSpan="4">Xác định nghĩa vụ thuế GTGT phải nộp trong kỳ</td>
             </tr>
 
             <tr>

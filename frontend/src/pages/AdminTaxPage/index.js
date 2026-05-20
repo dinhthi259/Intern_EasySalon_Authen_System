@@ -5,6 +5,7 @@ import TaxDeclarationCreate from "./components/TaxDeclarationCreate";
 import TaxDeclarationDetail from "./components/TaxDeclarationDetail";
 import styles from "./AdminTaxPage.module.scss";
 
+
 const cx = classNames.bind(styles);
 
 export default function AdminTaxPage() {
@@ -15,6 +16,8 @@ export default function AdminTaxPage() {
     setSelectedId(id);
     setTab("detail");
   };
+
+  
 
   return (
     <div className={cx("tax-page")}>
@@ -39,7 +42,7 @@ export default function AdminTaxPage() {
         </button>
       </div>
 
-      {tab === "list" && <TaxDeclarationList onView={openDetail} />}
+      {tab === "list" && <TaxDeclarationList onView={openDetail}/>}
 
       {tab === "create" && (
         <TaxDeclarationCreate onCreated={() => setTab("list")} />
@@ -48,6 +51,7 @@ export default function AdminTaxPage() {
       {tab === "detail" && (
         <TaxDeclarationDetail id={selectedId} onBack={() => setTab("list")} />
       )}
+      
     </div>
   );
 }
