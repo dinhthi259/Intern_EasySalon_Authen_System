@@ -1,236 +1,190 @@
-.wrapper {
+.tax-detail-page {
+  background: #f3f4f6;
   padding: 24px;
-  background: #f8fafc;
-  min-height: 100vh;
 }
 
-.loading {
-  padding: 24px;
-  font-size: 16px;
-  color: #4b5563;
+.tax-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
-.back-btn,
+.tax-actions button,
 .approve-btn {
   border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  background: #2563eb;
+  color: white;
   cursor: pointer;
-  font-weight: 700;
-  transition: all 0.25s ease;
 }
 
-.back-btn {
-  background: #fff;
-  color: #374151;
-  padding: 11px 18px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  border: 1px solid #e5e7eb;
-
-  &:hover {
-    color: #59c241;
-    border-color: #59c241;
-    transform: translateX(-2px);
-  }
+.approve-btn {
+  background: #16a34a;
 }
 
-.official-form {
-  background: #fff;
-  padding: 32px;
-  border-radius: 18px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-  color: #111827;
+.gtgt-form {
+  max-width: 1100px;
+  margin: 0 auto;
+  background: white;
+  color: #111;
+  padding: 28px 34px;
+  border: 1px solid #111;
+  font-family: "Times New Roman", serif;
+  font-size: 15px;
+  line-height: 1.35;
 }
 
-.form-top {
-  display: flex;
-  justify-content: space-between;
-  gap: 24px;
-  margin-bottom: 26px;
+.form-code {
+  text-align: right;
   font-size: 14px;
-
-  p {
-    margin-top: 6px;
-    color: #4b5563;
-  }
+  margin-bottom: 8px;
 }
 
-.national-title {
-  text-align: center;
-  max-width: 420px;
-}
-
-.main-title {
-  text-align: center;
-  font-size: 26px;
-  font-weight: 800;
-  margin-bottom: 10px;
-  color: #111827;
-}
-
-.center {
-  text-align: center;
-  color: #4b5563;
-  margin-bottom: 24px;
-}
-
-.period,
-.taxpayer-info {
-  border: 1px solid #e5e7eb;
-  border-radius: 14px;
-  padding: 18px 20px;
-  margin-bottom: 22px;
-  background: #fbfdff;
-
-  p {
-    margin: 8px 0;
-    line-height: 1.5;
-  }
-}
-
-.status {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 700;
-  background: #f3f4f6;
-  color: #374151;
-
-  &.draft {
-    background: #fff7ed;
-    color: #c2410c;
-  }
-
-  &.approved {
-    background: #ecfdf3;
-    color: #15803d;
-  }
-
-  &.cancelled {
-    background: #fef2f2;
-    color: #b91c1c;
-  }
-}
-
-.section-title {
-  font-size: 20px;
-  font-weight: 800;
-  margin: 28px 0 16px;
-  color: #1f2937;
-}
-
-.table-wrap {
-  width: 100%;
-  overflow-x: auto;
-  margin-bottom: 24px;
-}
-
-.official-table {
-  width: 100%;
-  min-width: 820px;
-  border-collapse: collapse;
-  background: #fff;
-  font-size: 14px;
-
-  th,
-  td {
-    border: 1px solid #d1d5db;
-    padding: 12px 14px;
-    text-align: left;
-    vertical-align: middle;
-  }
-
-  th {
-    background: #f3f4f6;
-    font-weight: 800;
-    color: #111827;
-    text-align: center;
-  }
-
-  td:first-child,
-  td:nth-child(3) {
-    text-align: center;
-  }
-
-  td:last-child {
-    font-weight: 700;
-    color: #111827;
-  }
-
-  tbody tr:hover {
-    background: #f9fafb;
-  }
-}
-
-.signature {
-  display: grid;
-  grid-template-columns: 1fr 320px;
-  gap: 24px;
-  margin-top: 36px;
-  text-align: center;
-
-  p {
-    margin: 8px 0;
-  }
-
-  b {
-    display: block;
-    margin: 10px 0;
-  }
-}
-
-.demo-note {
-  margin-top: 32px;
-  padding: 14px 16px;
-  border-radius: 12px;
-  background: #fff7ed;
-  color: #9a3412;
-  font-size: 14px;
+.form-code p {
+  margin: 4px 0;
   font-style: italic;
 }
 
-.approve-btn {
-  margin-top: 24px;
-  background: linear-gradient(135deg, #59c241, #47a832);
-  color: #fff;
-  padding: 14px 24px;
-  border-radius: 14px;
-  box-shadow: 0 8px 20px rgba(89, 194, 65, 0.25);
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 26px rgba(89, 194, 65, 0.32);
-  }
-
-  &:active {
-    transform: scale(0.98);
-  }
+.national-header {
+  text-align: center;
+  margin-bottom: 18px;
 }
 
-@media (max-width: 768px) {
-  .wrapper {
-    padding: 16px;
+.national-header b {
+  font-size: 17px;
+}
+
+.national-header p {
+  margin: 4px 0;
+  text-decoration: underline;
+}
+
+.gtgt-form h2 {
+  text-align: center;
+  margin: 16px 0 6px;
+  font-size: 22px;
+}
+
+.form-subtitle {
+  text-align: center;
+  font-style: italic;
+  margin-bottom: 18px;
+}
+
+.info-lines p {
+  margin: 7px 0;
+}
+
+.checkbox-row {
+  display: flex;
+  gap: 80px;
+  margin: 10px 0;
+}
+
+.currency {
+  text-align: right;
+  font-style: italic;
+  margin-top: 14px !important;
+}
+
+.gtgt-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+}
+
+.gtgt-table th,
+.gtgt-table td {
+  border: 1px solid #111;
+  padding: 6px 7px;
+  vertical-align: middle;
+}
+
+.gtgt-table th {
+  text-align: center;
+  font-weight: bold;
+}
+
+.gtgt-table td:nth-child(1),
+.gtgt-table td:nth-child(3) {
+  text-align: center;
+}
+
+.section-row {
+  font-weight: bold;
+  background: #f3f4f6;
+}
+
+.highlight-row {
+  font-weight: bold;
+  background: #fff7ed;
+}
+
+.number {
+  text-align: right !important;
+  white-space: nowrap;
+}
+
+.center {
+  text-align: center !important;
+}
+
+.commitment {
+  margin-top: 18px;
+  font-style: italic;
+}
+
+.signature-area {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 26px;
+  text-align: center;
+  gap: 40px;
+}
+
+.signature-area p {
+  margin: 8px 0;
+}
+
+.demo-warning {
+  margin-top: 28px;
+  padding: 10px;
+  border: 1px dashed #b91c1c;
+  color: #b91c1c;
+  font-style: italic;
+  text-align: center;
+}
+
+@media print {
+  body {
+    background: white;
   }
 
-  .official-form {
-    padding: 20px;
+  .no-print,
+  .tax-actions,
+  button {
+    display: none !important;
   }
 
-  .form-top {
-    flex-direction: column;
-    text-align: center;
+  .tax-detail-page {
+    padding: 0;
+    background: white;
   }
 
-  .main-title {
-    font-size: 21px;
+  .gtgt-form {
+    border: none;
+    max-width: 100%;
+    padding: 0;
+    font-size: 13px;
   }
 
-  .signature {
-    grid-template-columns: 1fr;
+  .gtgt-table th,
+  .gtgt-table td {
+    padding: 4px 5px;
   }
 
-  .approve-btn {
-    width: 100%;
+  .demo-warning {
+    display: none;
   }
 }

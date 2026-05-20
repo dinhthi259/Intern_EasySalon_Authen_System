@@ -58,8 +58,8 @@ public class TaxService : ITaxService
             Quarter = request.Quarter,
             Year = request.Year,
 
-            TotalRevenue = invoices.Sum(x => x.TotalAmount),
-            TotalTaxAmount = invoices.Sum(x => x.TaxAmount),
+            TotalRevenue = invoices.Sum(x => Math.Round(x.FinalAmount / 1.1m, 2)),
+            TotalTaxAmount = invoices.Sum(x => x.FinalAmount - Math.Round(x.FinalAmount / 1.1m, 2)),
             TotalFinalAmount = invoices.Sum(x => x.FinalAmount),
             TotalInvoice = invoices.Count,
 
@@ -70,13 +70,15 @@ public class TaxService : ITaxService
 
         foreach (var invoice in invoices)
         {
+            var revenueWithoutVat = Math.Round(invoice.FinalAmount / 1.1m, 2);
+            var vatAmount = invoice.FinalAmount - revenueWithoutVat;
             declaration.TaxDeclarationDetails.Add(new TaxDeclarationDetail
             {
                 InvoiceId = invoice.InvoiceId,
                 InvoiceCode = invoice.InvoiceCode,
                 CustomerName = invoice.CustomerName,
-                RevenueAmount = invoice.TotalAmount,
-                TaxAmount = invoice.TaxAmount,
+                RevenueAmount = revenueWithoutVat,
+                TaxAmount = vatAmount,
                 FinalAmount = invoice.FinalAmount,
                 InvoiceCreatedAt = invoice.CreatedAt
             });

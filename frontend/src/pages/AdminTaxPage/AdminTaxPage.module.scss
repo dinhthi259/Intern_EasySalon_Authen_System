@@ -1,7 +1,8 @@
 .tax-page {
   padding: 24px;
   background: #f8fafc;
-  min-height: 100vh;
+  max-height: 100vh;
+  overflow-y: auto;
 }
 
 .tax-header {

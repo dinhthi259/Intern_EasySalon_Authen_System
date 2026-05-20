@@ -34,8 +34,9 @@ public class InvoiceService : IInvoiceService
         if (existedInvoice != null)
             return existedInvoice;
 
-        var taxAmount = 0;
-        var finalAmount = order.TotalAmount;
+        decimal finalAmount = order.TotalAmount;
+        decimal revenueWithoutVat = Math.Round(finalAmount / 1.1m, 2);
+        decimal vatAmount = finalAmount - revenueWithoutVat;
 
         var invoice = new Invoice
         {
@@ -43,8 +44,8 @@ public class InvoiceService : IInvoiceService
             OrderId = order.Id,
             CustomerName = order.User.Profile.FullName,
             CustomerEmail = order.User.Email,
-            TotalAmount = order.TotalAmount,
-            TaxAmount = taxAmount,
+            TotalAmount = revenueWithoutVat,
+            TaxAmount = vatAmount,
             FinalAmount = finalAmount,
             Status = "Created",
             CreatedAt = DateTime.Now,
