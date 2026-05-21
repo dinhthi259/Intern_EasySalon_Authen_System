@@ -1,5 +1,4 @@
 using System.Text.RegularExpressions;
-using Hangfire;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using PayOS;
@@ -11,13 +10,15 @@ public class OrderService : IOrderService
     private readonly IOrderRepository _orderRepository;
     private readonly AppDbContext _context;
     private readonly IInventoryDocumentService _service;
+    private readonly InvoiceEmailService _invoiceEmailService;
     private readonly PayOSClient _payOS;
     private readonly IConfiguration _configuration;
     private readonly IHubContext<NotificationHub> _hubContext;
     private readonly IInvoiceService _invoiceService;
-    public OrderService(IOrderRepository orderRepository, AppDbContext context, IInventoryDocumentService service, PayOSClient payOS, IConfiguration configuration, IHubContext<NotificationHub> hubContext, IInvoiceService invoiceService)
+    public OrderService(IOrderRepository orderRepository, InvoiceEmailService invoiceEmailService, AppDbContext context, IInventoryDocumentService service, PayOSClient payOS, IConfiguration configuration, IHubContext<NotificationHub> hubContext, IInvoiceService invoiceService)
     {
         _orderRepository = orderRepository;
+        _invoiceEmailService = invoiceEmailService;
         _context = context;
         _service = service;
         _payOS = payOS;
@@ -573,9 +574,7 @@ public class OrderService : IOrderService
             var invoice = await _invoiceService.CreateInvoiceAsync(order.Id);
 
             // 3. Gửi mail hóa đơn
-            BackgroundJob.Enqueue<InvoiceEmailService>(
-                x => x.SendInvoiceEmailAsync(invoice.InvoiceId)
-            );
+            await _invoiceEmailService.SendInvoiceEmailAsync(invoice.InvoiceId);
             var inventoryExport = await _context.InventoryExports
                 .FirstOrDefaultAsync(x =>
                     x.ExportType == "ORDER" &&

@@ -1,4 +1,3 @@
-using Hangfire;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
@@ -160,9 +159,7 @@ public class RefundService : IRefundService
         Công ty cổ phần Tech AI Việt Nam</p>
     ";
 
-        BackgroundJob.Enqueue<IEmailSender>(
-            x => x.SendEmailAsync(customerEmail, emailSubject, emailBody)
-        );
+        await _emailSender.SendEmailAsync(customerEmail,emailSubject,emailBody);
     }
 
     public async Task RejectRefundAsync(long refundId, string reason)

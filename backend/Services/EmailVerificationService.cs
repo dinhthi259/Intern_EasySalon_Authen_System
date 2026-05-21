@@ -25,7 +25,7 @@ public class EmailVerificationService : IEmailVerificationService
         await _context.EmailVerificationTokens.AddAsync(verificationToken);
         await _context.SaveChangesAsync();
 
-        var verificationLink = $"http://localhost:3000/email-verify?token={Uri.EscapeDataString(rawToken)}";
+        var verificationLink = $"https://intern-easy-salon-authen-system.vercel.app/email-verify?token={Uri.EscapeDataString(rawToken)}";
 
         await _emailSender.SendEmailAsync(user.Email, "Verify Your Email", $"Please verify your email by clicking the following link: {verificationLink}");
     }
@@ -68,7 +68,7 @@ public class EmailVerificationService : IEmailVerificationService
         await _context.ResetPasswordTokens.AddAsync(resetToken);
         await _context.SaveChangesAsync();
 
-        var verificationLink = $"http://localhost:3000/reset-password?token={Uri.EscapeDataString(rawToken)}";
+        var verificationLink = $"https://intern-easy-salon-authen-system.vercel.app/reset-password?token={Uri.EscapeDataString(rawToken)}";
 
         await _emailSender.SendEmailAsync(user.Email, "Reset Your Password", $"Please click the following link to reset your password: {verificationLink}, This link will expire in 1 hour.");
     }
