@@ -22,47 +22,66 @@ public class PayOSController : ControllerBase
     }
 
     [HttpPost("webhook")]
-    public async Task<IActionResult> PayOSWebhook(
-    [FromBody] Webhook webhookBody)
+    public async Task<IActionResult> PayOSWebhook([FromBody] Webhook webhookBody)
     {
-        var verifiedData = await _payOS.Webhooks.VerifyAsync(webhookBody);
-
-        var payment = await _context.Payments
-            .FirstOrDefaultAsync(x => x.OrderCode == verifiedData.OrderCode);
-
-        if (payment == null)
-            return Ok();
-
-        if (payment.Status == "Paid")
-            return Ok();
-
-        payment.Status = "Paid";
-
-        var order = await _context.Orders.FindAsync(payment.OrderId);
-
-        if (order != null)
+        try
         {
-            order.PaymentStatus = "Đã thanh toán";
-            order.UpdateAt = DateTime.Now;
-            order.Status = "Chờ xác nhận";
+            Console.WriteLine("PayOS webhook received");
+
+            if (webhookBody == null)
+            {
+                Console.WriteLine("Webhook body is null");
+                return Ok();
+            }
+
+            var verifiedData = await _payOS.Webhooks.VerifyAsync(webhookBody);
+
+            var payment = await _context.Payments
+                .FirstOrDefaultAsync(x => x.OrderCode == verifiedData.OrderCode);
+
+            if (payment == null)
+                return Ok();
+
+            if (payment.Status == "Paid")
+                return Ok();
+
+            payment.Status = "Paid";
+
+            var order = await _context.Orders.FindAsync(payment.OrderId);
+
+            if (order != null)
+            {
+                order.PaymentStatus = "Đã thanh toán";
+                order.UpdateAt = DateTime.Now;
+                order.Status = "Chờ xác nhận";
+
+                var notification = new Notification
+                {
+                    UserId = order.UserId,
+                    Title = "Thanh toán thành công",
+                    Message = $"Đơn hàng #{order.Id} đã được thanh toán thành công",
+                    Type = "PAYMENT_SUCCESS",
+                    IsRead = false,
+                    CreatedAt = DateTime.Now,
+                    Link = "/my-orders"
+                };
+
+                _context.Notifications.Add(notification);
+
+                await _hubContext.Clients
+                    .Group($"user_{order.UserId}")
+                    .SendAsync("ReceiveNotification", notification);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
-        var notification = new Notification
+        catch (Exception ex)
         {
-            UserId = order.UserId,
-            Title = "Thanh toán thành công",
-            Message = $"Đơn hàng #{order.Id} đã được thanh toán thành công",
-            Type = "PAYMENT_SUCCESS",
-            IsRead = false,
-            CreatedAt = DateTime.Now,
-            Link = $"/my-orders"
-        };
+            Console.WriteLine("PayOS webhook error: " + ex.ToString());
 
-        _context.Notifications.Add(notification);
-        await _context.SaveChangesAsync();
-        await _hubContext.Clients
-            .Group($"user_{order.UserId}")
-            .SendAsync("ReceiveNotification", notification);
-
-        return Ok();
+            return Ok();
+        }
     }
 }
