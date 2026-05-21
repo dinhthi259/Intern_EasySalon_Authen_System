@@ -68,15 +68,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     };
 });
 
-// builder.Services.AddHangfire(config =>
-// {
-//     config.UseStorage(new MySqlStorage(
-//     connectionString,
-//     new MySqlStorageOptions()
-// ));
-// });
+builder.Services.AddHangfire(config =>
+{
+    config.UseStorage(new MySqlStorage(
+    connectionString,
+    new MySqlStorageOptions()
+));
+});
 
-// builder.Services.AddHangfireServer();
+builder.Services.AddHangfireServer();
 
 builder.Services.AddSignalR();
 
@@ -84,24 +84,30 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.AllowAnyOrigin()
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        policy.WithOrigins(
+        "http://localhost:3000",
+        "https://intern-easy-salon-authen-system-8vwc9o7ki.vercel.app"
+      )
+      .AllowAnyHeader()
+      .AllowAnyMethod()
+      .AllowCredentials();
     });
 });
 
 
 
-// builder.Services.AddSingleton<Fido2>(sp =>
-// {
-//     return new Fido2(new Fido2Configuration
-//     {
-//         ServerDomain = "localhost",
-//         ServerName = "TechAI",
-//         Origins = new HashSet<string> { "http://localhost:3000" }
-//     });
-// });
-
+builder.Services.AddSingleton<Fido2>(sp =>
+{
+    return new Fido2(new Fido2Configuration
+    {
+        ServerDomain = "intern-easy-salon-authen-system-8vwc9o7ki.vercel.app",
+        ServerName = "TechAI",
+        Origins = new HashSet<string>
+        {
+            "https://intern-easy-salon-authen-system-8vwc9o7ki.vercel.app"
+        }
+    });
+});
 
 
 builder.Services.AddSingleton<PayOSClient>(sp =>
@@ -183,7 +189,7 @@ app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-// app.UseHangfireDashboard();
+app.UseHangfireDashboard();
 
 app.MapHub<NotificationHub>("/notificationHub");
 
