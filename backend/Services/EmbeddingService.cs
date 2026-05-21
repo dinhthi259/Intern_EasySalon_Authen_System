@@ -21,7 +21,7 @@ public class EmbeddingService : IEmbeddingService
 
         var body = new
         {
-            model = "models/text-embedding-004",
+            model = "models/gemini-embedding-001",
             content = new
             {
                 parts = new[]
@@ -32,7 +32,7 @@ public class EmbeddingService : IEmbeddingService
         };
 
         var url =
-            $"https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent?key={apiKey}";
+            $"https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent?key={apiKey}";
 
         var res = await _http.PostAsync(
             url,
