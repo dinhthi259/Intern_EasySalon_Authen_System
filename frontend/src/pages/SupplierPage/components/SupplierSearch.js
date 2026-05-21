@@ -28,7 +28,7 @@ const SupplierSearch = ({ onSearch, onAdd }) => {
           onChange={(e) => setSearch(e.target.value)}
           onKeyPress={(e) => e.key === "Enter" && handleSearch()}
         />
-        <button onClick={handleSearch}>Tìm kiếm</button>
+        
       </div>
 
       <select
@@ -40,6 +40,8 @@ const SupplierSearch = ({ onSearch, onAdd }) => {
         <option value="ACTIVE">Hoạt động</option>
         <option value="INACTIVE">Không hoạt động</option>
       </select>
+
+      <button className={cx("resetBtn")} onClick={handleSearch}>Tìm kiếm</button>
 
       <button className={cx("resetBtn")} onClick={handleReset}>
         Xóa bộ lọc

@@ -1,13 +1,13 @@
-import { removeItem } from "../../../api/CartApi";
 import styles from "../Cart.module.scss";
 import classNames from "classnames/bind";
-import { useState } from "react";
+import { notifyWarning } from "../../../components/Nofitication";
 import { FaTrashCan, FaPlus, FaMinus } from "react-icons/fa6";
 
 const cx = classNames.bind(styles);
 
 function CartItem({ item, onUpdate, onRemove, checked, onCheck }) {
   const price = item.discountPrice || item.price;
+  const availableQuantity = Math.max(0, item.stockQuantity - 5);
 
   return (
     <div className={cx("cart-item")}>
@@ -33,8 +33,9 @@ function CartItem({ item, onUpdate, onRemove, checked, onCheck }) {
       <div className={cx("quantity")}>
         <button
           className={cx("btn")}
-          onClick={() => onUpdate(item.productId, item.quantity - 1)}
-          disabled={item.quantity <= 1}
+          onClick={() => {
+            onUpdate(item.productId, item.quantity - 1);
+          }}
         >
           −
         </button>
@@ -43,17 +44,39 @@ function CartItem({ item, onUpdate, onRemove, checked, onCheck }) {
           type="number"
           value={item.quantity}
           min={1}
-          onChange={(e) =>
-            onUpdate(item.productId, Math.max(1, Number(e.target.value)))
-          }
+          max={item.stockQuantity}
+          onChange={(e) => {
+            const value = Number(e.target.value);
+
+            if (value > availableQuantity) {
+              notifyWarning("không thể chọn quá số lượng tồn kho");
+
+              onUpdate(item.productId, availableQuantity);
+              return;
+            }
+
+            onUpdate(item.productId, Math.max(1, value));
+          }}
         />
 
         <button
           className={cx("btn")}
-          onClick={() => onUpdate(item.productId, item.quantity + 1)}
+          onClick={() => {
+            if (item.quantity > availableQuantity) {
+              notifyWarning("không thể chọn quá số lượng tồn kho");
+              onUpdate(item.productId, availableQuantity);
+              return;
+            }
+
+            onUpdate(item.productId, item.quantity + 1);
+          }}
         >
           +
         </button>
+
+        <p className={cx("stock")}>
+          Còn: {availableQuantity} sản phẩm
+        </p>
       </div>
       <button className={cx("remove")} onClick={() => onRemove(item.productId)}>
         <FaTrashCan />

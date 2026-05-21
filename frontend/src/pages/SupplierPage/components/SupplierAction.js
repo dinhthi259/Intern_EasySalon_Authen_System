@@ -60,7 +60,7 @@ const SupplierAction = ({ onClose, onSuccess }) => {
                 name="code"
                 value={form.code}
                 onChange={handleChange}
-                placeholder="VD: SUP001"
+                placeholder="Nhập mã nhà cung cấp"
                 required
               />
             </div>
@@ -72,7 +72,7 @@ const SupplierAction = ({ onClose, onSuccess }) => {
                 name="name"
                 value={form.name}
                 onChange={handleChange}
-                placeholder="Tên công ty"
+                placeholder="Nhập tên nhà cung cấp"
                 required
               />
             </div>
@@ -84,7 +84,7 @@ const SupplierAction = ({ onClose, onSuccess }) => {
                 name="contactPerson"
                 value={form.contactPerson}
                 onChange={handleChange}
-                placeholder="Tên người liên hệ"
+                placeholder="Nhập tên người liên hệ"
               />
             </div>
 
@@ -95,7 +95,7 @@ const SupplierAction = ({ onClose, onSuccess }) => {
                 name="phone"
                 value={form.phone}
                 onChange={handleChange}
-                placeholder="0123456789"
+                placeholder="Nhập số điện thoại"
               />
             </div>
 
@@ -106,7 +106,7 @@ const SupplierAction = ({ onClose, onSuccess }) => {
                 name="email"
                 value={form.email}
                 onChange={handleChange}
-                placeholder="example@company.com"
+                placeholder="Nhập địa chỉ email"
               />
             </div>
 
@@ -117,7 +117,7 @@ const SupplierAction = ({ onClose, onSuccess }) => {
                 name="address"
                 value={form.address}
                 onChange={handleChange}
-                placeholder="123 Đường ABC"
+                placeholder="Nhập địa chỉ"
               />
             </div>
 
@@ -128,7 +128,7 @@ const SupplierAction = ({ onClose, onSuccess }) => {
                 name="province"
                 value={form.province}
                 onChange={handleChange}
-                placeholder="TP HCM"
+                placeholder="Nhập tỉnh/thành phố"
               />
             </div>
 
@@ -139,7 +139,7 @@ const SupplierAction = ({ onClose, onSuccess }) => {
                 name="district"
                 value={form.district}
                 onChange={handleChange}
-                placeholder="Quận 1"
+                placeholder="Nhập quận/huyện"
               />
             </div>
 
@@ -150,7 +150,7 @@ const SupplierAction = ({ onClose, onSuccess }) => {
                 name="taxCode"
                 value={form.taxCode}
                 onChange={handleChange}
-                placeholder="0123456789"
+                placeholder="Nhập mã số thuế"
               />
             </div>
 
@@ -161,7 +161,7 @@ const SupplierAction = ({ onClose, onSuccess }) => {
                 name="bankName"
                 value={form.bankName}
                 onChange={handleChange}
-                placeholder="Tên ngân hàng"
+                placeholder="Nhập tên ngân hàng"
               />
             </div>
 
@@ -172,7 +172,7 @@ const SupplierAction = ({ onClose, onSuccess }) => {
                 name="bankAccount"
                 value={form.bankAccount}
                 onChange={handleChange}
-                placeholder="Số tài khoản"
+                placeholder="Nhập số tài khoản"
               />
             </div>
 
@@ -182,7 +182,7 @@ const SupplierAction = ({ onClose, onSuccess }) => {
                 name="note"
                 value={form.note}
                 onChange={handleChange}
-                placeholder="Ghi chú thêm"
+                placeholder="Nhập ghi chú thêm"
                 rows="3"
               ></textarea>
             </div>

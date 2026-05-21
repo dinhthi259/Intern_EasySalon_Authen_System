@@ -1,22 +1,15 @@
 import classNames from "classnames/bind";
 import styles from "./FeaturedProducts.module.scss";
 
-import {
-  FaStar,
-  FaShoppingCart,
-  FaHeart,
-  FaArrowRight,
-} from "react-icons/fa";
+import { FaStar, FaShoppingCart, FaHeart, FaArrowRight } from "react-icons/fa";
 
 import { useNavigate } from "react-router-dom";
+import { addToCart } from "../../../api/CartApi";
+import { notifyError, notifySuccess } from "../../../components/Nofitication";
 
 const cx = classNames.bind(styles);
 
-function FeaturedProducts({
-  title,
-  slug,
-  products = [],
-}) {
+function FeaturedProducts({ title, slug, products = [] }) {
   const navigate = useNavigate();
 
   const handleProduct = (productSlug) => {
@@ -27,25 +20,32 @@ function FeaturedProducts({
     navigate(`/category/${slug}`);
   };
 
+  const handleAddToCart = async (id) => {
+    try {
+      // Logic to add product to cart
+      const res = await addToCart(id, 1);
+      if (res) {
+        notifySuccess("Thêm vào giỏ hàng thành công!");
+      }
+    } catch (error) {
+      notifyError("Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng!");
+    }
+  };
+
   return (
     <section className={cx("wrapper")}>
       <div className={cx("container")}>
         {/* HEADER */}
         <div className={cx("header")}>
           <div>
-            <h2 className={cx("title")}>
-              {title}
-            </h2>
+            <h2 className={cx("title")}>{title}</h2>
 
             <p className={cx("subtitle")}>
               Khám phá các sản phẩm nổi bật và bán chạy nhất
             </p>
           </div>
 
-          <button
-            className={cx("viewAll")}
-            onClick={handleViewAll}
-          >
+          <button className={cx("viewAll")} onClick={handleViewAll}>
             Xem tất cả
             <FaArrowRight />
           </button>
@@ -61,9 +61,7 @@ function FeaturedProducts({
             >
               {/* DISCOUNT */}
               {p.discountPercent && (
-                <div className={cx("badge")}>
-                  -{p.discountPercent}%
-                </div>
+                <div className={cx("badge")}>-{p.discountPercent}%</div>
               )}
 
               {/* WISHLIST */}
@@ -76,41 +74,28 @@ function FeaturedProducts({
 
               {/* IMAGE */}
               <div className={cx("imageWrap")}>
-                <img
-                  src={p.thumbnail}
-                  alt={p.name}
-                />
+                <img src={p.thumbnail} alt={p.name} />
               </div>
 
               {/* INFO */}
               <div className={cx("content")}>
-                <p className={cx("category")}>
-                  {title}
-                </p>
+                <p className={cx("category")}>{title}</p>
 
-                <h3 className={cx("name")}>
-                  {p.name}
-                </h3>
+                <h3 className={cx("name")}>{p.name}</h3>
 
                 {/* RATING */}
                 <div className={cx("rating")}>
                   <FaStar />
 
-                  <span>
-                    {p.rating || 5}
-                  </span>
+                  <span>{p.rating || 5}</span>
 
-                  <small>
-                    ({p.reviewCount || 0})
-                  </small>
+                  <small>({p.reviewCount || 0})</small>
                 </div>
 
                 {/* PRICE */}
                 <div className={cx("priceBox")}>
                   <span className={cx("salePrice")}>
-                    {(
-                      p.discountPrice || p.price
-                    )?.toLocaleString()}đ
+                    {(p.discountPrice || p.price)?.toLocaleString()}đ
                   </span>
 
                   {p.discountPrice && (
@@ -123,7 +108,10 @@ function FeaturedProducts({
                 {/* BUTTON */}
                 <button
                   className={cx("addCart")}
-                  onClick={(e) => e.stopPropagation()}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleAddToCart(p.id);
+                  }}
                 >
                   <FaShoppingCart />
                   Thêm vào giỏ

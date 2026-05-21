@@ -8,6 +8,7 @@ public class CartItemDto
     public decimal? DiscountPrice { get; set; }
 
     public int Quantity { get; set; }
+    public int StockQuantity { get; set; }
 
     public decimal FinalPrice => (DiscountPrice ?? Price) * Quantity;
 }

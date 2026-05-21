@@ -2,6 +2,8 @@ import classNames from "classnames/bind";
 import styles from "./ProductGrid.module.scss";
 import { useNavigate } from "react-router-dom";
 import { FaHeart, FaShoppingCart, FaStar } from "react-icons/fa";
+import { addToCart } from "../../../api/CartApi";
+import { notifyError, notifySuccess } from "../../../components/Nofitication";
 
 const cx = classNames.bind(styles);
 
@@ -11,6 +13,18 @@ export default function ProductGrid({ products }) {
     console.log(slug);
     navigate(`/product/${slug}`);
   };
+
+  const handleAddToCart = async (id) => {
+      try {
+        // Logic to add product to cart
+        const res = await addToCart(id, 1);
+        if (res) {
+          notifySuccess("Thêm vào giỏ hàng thành công!");
+        }
+      } catch (error) {
+        notifyError("Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng!");
+      }
+    };
   return (
     <div className={cx("grid")}>
       {products.slice(0, 8).map((p) => (
@@ -67,7 +81,10 @@ export default function ProductGrid({ products }) {
             {/* BUTTON */}
             <button
               className={cx("addCart")}
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleAddToCart(p.id);
+              }}
             >
               <FaShoppingCart />
               Thêm vào giỏ

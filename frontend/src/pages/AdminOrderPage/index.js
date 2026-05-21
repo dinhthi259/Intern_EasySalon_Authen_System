@@ -12,7 +12,7 @@ import { confirmRefund, getRefundDetails } from "../../api/RefundApi";
 import ConfirmDialog from "../../components/ConfirmDialog";
 import { notifyError, notifySuccess } from "../../components/Nofitication";
 
-import OrderTabs from "../MyOrderPage/components/OrderTabs";
+import OrderTab from "./components/OrderTab";
 // import OrderSearch from "../MyOrderPage/components/OrderSearch";
 import OrderList from "./components/OrderList";
 import EmptyState from "../MyOrderPage/components/EmptyState";
@@ -160,7 +160,7 @@ export default function MyOrderPage() {
       </div>
 
       <div className={cx("content")}>
-        <OrderTabs onChange={setStatus} counts={countByStatus} />
+        <OrderTab onChange={setStatus} counts={countByStatus} />
         <OrderSearch onSearch={handleSearch} />
 
         <div className={cx("list")}>

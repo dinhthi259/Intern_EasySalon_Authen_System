@@ -58,7 +58,11 @@ public class CartService : ICartService
                 Thumbnail = ci.Product.Thumbnail,
                 Price = ci.Product.Price,
                 DiscountPrice = ci.Product.DiscountPrice,
-                Quantity = ci.Quantity
+                Quantity = ci.Quantity,
+                StockQuantity = _context.Inventories
+                    .Where(i => i.ProductId == ci.ProductId)
+                    .Select(i => i.Quantity)
+                    .FirstOrDefault()
             }).ToList()
         };
     }

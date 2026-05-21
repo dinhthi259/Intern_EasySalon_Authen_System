@@ -114,14 +114,6 @@ const StatisticsDashboard = () => {
     <div className={styles.dashboard}>
       <div className={styles.header}>
         <h2>Báo cáo thống kê</h2>
-        <div className={styles.controls}>
-          <button className={styles.exportButton} onClick={handleExportExcel}>
-            📊 Export Excel
-          </button>
-          <button className={styles.exportButton} onClick={handleExportPdf}>
-            📄 Export PDF
-          </button>
-        </div>
       </div>
 
       {/* KPI Cards */}
