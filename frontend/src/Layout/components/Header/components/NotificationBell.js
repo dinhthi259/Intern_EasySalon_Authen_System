@@ -13,7 +13,7 @@ const cx = classNames.bind(styles);
 function NotificationBell({ userId }) {
   const [notifications, setNotifications] = useState([]);
   const [open, setOpen] = useState(false);
-  const API_URL = import.meta.env.VITE_API_URL;
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     if (!userId) {
