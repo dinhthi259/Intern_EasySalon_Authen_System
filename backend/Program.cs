@@ -16,7 +16,13 @@ using Backend.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
-var cs = builder.Configuration.GetConnectionString("DefaultConnection");
+
+var connectionString =
+    builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? builder.Configuration["DATABASE_URL"];
+Console.WriteLine("HAS_DB_CONNECTION: " + !string.IsNullOrWhiteSpace(connectionString));
+
+var cs = connectionString;
 Console.WriteLine("DB_HOST_TEST: " + cs);
 
 // Add services to the container.
@@ -26,8 +32,8 @@ builder.Services.Configure<GmailOptions>(
     builder.Configuration.GetSection(GmailOptions.GmailOptionKey)
 );
 builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(
-    builder.Configuration.GetConnectionString("DefaultConnection"),
-    ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
+    connectionString,
+    ServerVersion.AutoDetect(connectionString)
 ));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 .AddJwtBearer(options =>
@@ -52,7 +58,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddHangfire(config =>
 {
     config.UseStorage(new MySqlStorage(
-    builder.Configuration.GetConnectionString("DefaultConnection"),
+    connectionString,
     new MySqlStorageOptions()
 ));
 });
