@@ -20,7 +20,7 @@ public class OpenAiService : IOpenAiService
 
         var model =
             _config["Gemini:Model"]
-            ?? "gemini-1.5-flash-8b";
+            ?? "gemini-2.5-flash-lite";
 
         if (string.IsNullOrWhiteSpace(apiKey))
         {

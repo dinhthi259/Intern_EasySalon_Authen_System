@@ -108,6 +108,7 @@ export default function FloatingChatModal({ isOpen, onClose }) {
       }
 
       // Add AI response
+      // Add AI response
       const botResponse = parseBotMessage(response.data.message);
 
       const aiMessage = {
@@ -118,7 +119,10 @@ export default function FloatingChatModal({ isOpen, onClose }) {
         createdAt: new Date().toISOString(),
       };
 
-      setCurrentMessages((prev) => [...prev, aiMessage]);
+      // Chỉ append nếu KHÔNG phải session mới
+      if (currentSessionId) {
+        setCurrentMessages((prev) => [...prev, aiMessage]);
+      }
     } catch (error) {
       console.error("Failed to send message:", error);
 
