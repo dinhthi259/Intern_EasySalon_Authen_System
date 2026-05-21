@@ -18,8 +18,8 @@ export default function ProductInfo({ product }) {
     brand,
     price,
     discountPrice,
-    ratingAvg,
-    ratingCount,
+    averageRating,
+    totalReviews,
     discountPercent,
     saleMoney,
   } = product;
@@ -93,9 +93,9 @@ export default function ProductInfo({ product }) {
         <p className={cx("brand")}>{brand}</p>
 
         <span
-          className={cx("stock-status", stock > 0 ? "in-stock" : "out-stock")}
+          className={cx("stock-status", availableQuantity > 0 ? "in-stock" : "out-stock")}
         >
-          {stock > 0 ? "Còn hàng" : "Hết hàng"}
+          {availableQuantity > 0 ? "Còn hàng" : "Hết hàng"}
         </span>
       </div>
 
