@@ -16,6 +16,8 @@ using Backend.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
+var cs = builder.Configuration.GetConnectionString("DefaultConnection");
+Console.WriteLine("DB_HOST_TEST: " + cs);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
