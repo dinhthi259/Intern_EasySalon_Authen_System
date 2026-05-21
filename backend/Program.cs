@@ -20,11 +20,15 @@ var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
 builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
 var connectionString =
-    builder.Configuration["MYSQL_DATABASE"]
-    ?? builder.Configuration["ConnectionStrings:DefaultConnection"]
-    ?? builder.Configuration.GetConnectionString("DefaultConnection");
+    builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? builder.Configuration["ConnectionStrings:DefaultConnection"];
 
 Console.WriteLine("HAS_DB_CONNECTION: " + !string.IsNullOrWhiteSpace(connectionString));
+
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new Exception("Missing ConnectionStrings__DefaultConnection");
+}
 
 if (string.IsNullOrWhiteSpace(connectionString))
 {
