@@ -29,9 +29,6 @@ function UserButton() {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     window.dispatchEvent(new Event("auth-change"));
-    if (window.subiz) {
-      window.subiz("resetCustomer");
-    }
     navigate("/login");
   };
 
@@ -54,13 +51,13 @@ function UserButton() {
           </div>
           <div
             className={cx("dropdownItem")}
-            onClick={() => navigate("/profile")}
+            onClick={() => navigate("/my-orders")}
           >
             Đơn hàng của tôi
           </div>
           <div
             className={cx("dropdownItem")}
-            onClick={() => navigate("/session")}
+            onClick={() => navigate("/address")}
           >
             Sổ địa chỉ nhận hàng
           </div>

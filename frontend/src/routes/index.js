@@ -34,6 +34,7 @@ import PaymentSuccessPage from "../pages/PaymentPage/PaymentSuccessPage";
 import BankAccountPage from "../pages/BankAccountPage";
 import AdminInvoicePage from "../pages/AdminInvoicePage";
 import AdminTaxPage from "../pages/AdminTaxPage";
+import AdminInventoryInvoicesPage from "../pages/AdminInventoryInvoicePage";
 
 import { ProtectedRoute } from "./Routes";
 import { AdminRoute } from "./Routes";
@@ -232,6 +233,13 @@ const routes = [
   {
     path: "/admin/documents/tax-declarations",
     component: AdminTaxPage,
+    layout: AdminLayout,
+    ProtectedRoute: true,
+    AdminRoute: true
+  },
+  {
+    path: "/admin/documents/inventory-invoices",
+    component: AdminInventoryInvoicesPage,
     layout: AdminLayout,
     ProtectedRoute: true,
     AdminRoute: true

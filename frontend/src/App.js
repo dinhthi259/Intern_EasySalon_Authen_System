@@ -4,12 +4,9 @@ import routes from "./routes";
 import { AdminRoute, ProtectedRoute, PublicRoutes } from "./routes/Routes.js";
 import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import SubizChat from "./components/Chat/SubizChat";
-import { useSubizUser } from "./hooks/useSubizUser";
 import FloatingChatBubble from "./components/FloatingChatBubble";
 
 function App() {
-  useSubizUser();
   return (
     <Router>
       <div className="App">
@@ -53,7 +50,6 @@ function App() {
           theme="colored"
           transition={Bounce}
         />
-        <SubizChat />
         <FloatingChatBubble />
       </div>
     </Router>

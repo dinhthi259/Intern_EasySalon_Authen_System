@@ -86,7 +86,7 @@ export default function SidebarSettings() {
         </NavLink>
       </div>
       <div className={cx("menu")}>
-        <NavLink to="/address" className={cx("item")}>
+        <NavLink to="/session" className={cx("item")}>
           Cài đặt bảo mật
         </NavLink>
       </div>

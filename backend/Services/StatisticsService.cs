@@ -318,7 +318,7 @@ public class StatisticsService : IStatisticsService
                 Id = id++,
                 Type = "danger",
                 Title = "Sản phẩm hết hàng",
-                Message = $"Có {outStockProducts} sản phẩm đã hết hàng> Hãy nhập thêm hàng ngay.",
+                Message = $"Có {outStockProducts} sản phẩm đã hết hàng. Hãy nhập thêm hàng ngay.",
                 Time = "Hôm nay"
             });
         }

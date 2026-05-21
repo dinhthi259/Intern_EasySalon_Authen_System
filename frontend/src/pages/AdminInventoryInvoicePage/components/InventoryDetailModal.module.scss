@@ -1,0 +1,376 @@
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+  padding: 20px;
+  animation: fadeIn 0.25s ease;
+}
+
+.modal {
+  width: 100%;
+  max-width: 950px;
+  max-height: 95vh;
+  overflow-y: auto;
+  background: #ffffff;
+  border-radius: 22px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  animation: zoomIn 0.25s ease;
+}
+
+/* ===== CONTROLS ===== */
+
+.controls {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 16px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.printBtn {
+  border: none;
+  background: linear-gradient(135deg, #00223e, #005b96);
+  color: white;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.25s;
+  box-shadow: 0 8px 18px rgba(0, 34, 62, 0.2);
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+.closeBtn {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: none;
+  background: #f1f5f9;
+  color: #0f172a;
+  font-size: 18px;
+  cursor: pointer;
+  transition: 0.25s;
+
+  &:hover {
+    background: #e2e8f0;
+    transform: rotate(90deg);
+  }
+}
+
+/* ===== PAPER ===== */
+
+.invoicePaper {
+  padding: 40px;
+  background: #fff;
+  color: #111;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.companyHeader {
+  text-align: center;
+  border-bottom: 2px solid #111;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+
+  h1 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #111;
+  }
+
+  p {
+    margin: 3px 0;
+    font-size: 13px;
+    color: #111;
+  }
+}
+
+.companyName {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #111 !important;
+}
+
+.invoiceTitle {
+  text-align: center;
+  margin: 22px 0;
+
+  h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #111;
+  }
+}
+
+.invoiceInfo {
+  margin-bottom: 18px;
+}
+
+.infoRow {
+  display: flex;
+  margin-bottom: 8px;
+}
+
+.infoCol {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+
+  label {
+    min-width: 110px;
+    font-weight: 700;
+    color: #111;
+  }
+
+  span {
+    color: #111;
+  }
+}
+
+.itemsTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 18px 0;
+  border: 1px solid #111;
+
+  th,
+  td {
+    border: 1px solid #111;
+    padding: 7px 6px;
+    font-size: 13px;
+    color: #111;
+    background: #fff !important;
+  }
+
+  th {
+    text-align: center;
+    font-weight: 700;
+  }
+}
+
+.right {
+  text-align: right;
+}
+
+.emptyRow {
+  height: 35px;
+
+  td {
+    color: transparent;
+  }
+}
+
+.totalSection {
+  width: 330px;
+  margin-left: auto;
+  margin-top: 10px;
+  margin-bottom: 35px;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+
+  .label,
+  .amount {
+    color: #111;
+    font-weight: 700;
+  }
+
+  &.highlight {
+    border-top: 1px solid #111;
+    margin-top: 5px;
+    padding-top: 8px;
+  }
+}
+
+.signaturesSection {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  margin-top: 45px;
+  text-align: center;
+}
+
+.signatureBox {
+  min-height: 110px;
+}
+
+.signatureLabel {
+  margin: 0;
+  font-weight: 700;
+  color: #111;
+}
+
+.signatureNote {
+  margin: 4px 0 58px;
+  font-size: 13px;
+  font-style: italic;
+  color: #111;
+}
+
+.signatureSpace {
+  border-bottom: 1px solid #111;
+}
+
+.footer {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 12px;
+  color: #111;
+  border-top: 1px solid #111;
+  padding-top: 8px;
+}
+
+/* ===== SCROLL ===== */
+
+.modal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 20px;
+}
+
+/* ===== ANIMATION ===== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 768px) {
+  .invoicePaper {
+    padding: 20px;
+  }
+
+  .companyHeader h1 {
+    font-size: 18px;
+  }
+
+  .invoiceTitle h2 {
+    font-size: 22px;
+  }
+
+  .infoRow {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .itemsTable {
+    font-size: 12px;
+
+    th,
+    td {
+      padding: 10px 8px;
+    }
+  }
+
+  .signaturesSection {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .totalSection {
+    width: 100%;
+  }
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  :global(html),
+  :global(body),
+  :global(#root) {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    overflow: visible !important;
+  }
+
+  .controls,
+  .noPrint {
+    display: none !important;
+  }
+
+  .modalOverlay {
+    position: static !important;
+    inset: auto !important;
+    display: block !important;
+    background: white !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  .modal {
+    position: static !important;
+    width: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    transform: none !important;
+  }
+
+  .invoicePaper {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
+}

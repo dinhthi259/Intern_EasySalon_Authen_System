@@ -156,35 +156,93 @@
   text-align: center;
 }
 
+
+@page {
+  size: A4 portrait;
+  margin: 6mm;
+}
+
 @media print {
+  html,
   body {
-    background: white;
+    width: 210mm;
+    height: 297mm;
+    overflow: hidden !important;
+    background: white !important;
   }
 
-  .no-print,
-  .tax-actions,
-  button {
-    display: none !important;
+  body * {
+    visibility: hidden !important;
   }
 
-  .tax-detail-page {
-    padding: 0;
-    background: white;
+  .print-area,
+  .print-area * {
+    visibility: visible !important;
+  }
+
+  .print-area {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   .gtgt-form {
-    border: none;
-    max-width: 100%;
-    padding: 0;
-    font-size: 13px;
+    width: 100% !important;
+    max-width: 100% !important;
+
+    border: none !important;
+    box-shadow: none !important;
+
+    margin: 0 !important;
+    padding: 4px !important;
+
+    font-size: 9px !important;
+    line-height: 1.1 !important;
+
+    transform: scale(0.92);
+    transform-origin: top left;
+  }
+
+  .gtgt-form h2 {
+    font-size: 16px !important;
+    margin: 4px 0 !important;
+  }
+
+  .gtgt-form p {
+    margin: 2px 0 !important;
+  }
+
+  .gtgt-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    table-layout: fixed !important;
   }
 
   .gtgt-table th,
   .gtgt-table td {
-    padding: 4px 5px;
+    font-size: 8px !important;
+    padding: 6px !important;
+    line-height: 1 !important;
+    word-break: break-word;
   }
 
-  .demo-warning {
-    display: none;
+  .signature-area {
+    margin-top: 8px !important;
+  }
+
+  .signature-area p {
+    margin: 1px 0 !important;
+  }
+
+  .demo-warning,
+  .tax-actions,
+  .no-print,
+  button,
+  aside,
+  nav,
+  header {
+    display: none !important;
   }
 }

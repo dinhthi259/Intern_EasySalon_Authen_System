@@ -1,3 +1,4 @@
+using Hangfire;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
@@ -5,11 +6,13 @@ public class RefundService : IRefundService
 {
     private readonly AppDbContext _context;
     private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IEmailSender _emailSender;
 
-    public RefundService(AppDbContext context, IHubContext<NotificationHub> hubContext)
+    public RefundService(AppDbContext context, IHubContext<NotificationHub> hubContext, IEmailSender emailSender)
     {
         _context = context;
         _hubContext = hubContext;
+        _emailSender = emailSender;
     }
 
     public async Task CreateRefundRequestAsync(
@@ -104,6 +107,8 @@ public class RefundService : IRefundService
             throw new Exception("Yêu cầu hoàn tiền đã được xử lý");
 
         var order = await _context.Orders
+            .Include(x => x.User)
+                .ThenInclude(u => u.Profile)
             .FirstOrDefaultAsync(x => x.Id == refund.OrderId);
 
         if (order == null)
@@ -115,6 +120,7 @@ public class RefundService : IRefundService
         order.Status = "Đã hủy";
         order.PaymentStatus = "Đã hoàn tiền";
         order.UpdateAt = DateTime.Now;
+
         var notification = new Notification
         {
             UserId = order.UserId,
@@ -128,10 +134,35 @@ public class RefundService : IRefundService
 
         _context.Notifications.Add(notification);
         await _context.SaveChangesAsync();
+
         await _hubContext.Clients
             .Group($"user_{order.UserId}")
             .SendAsync("ReceiveNotification", notification);
 
+        var customerName = order.User.Profile?.FullName ?? "Quý khách";
+        var customerEmail = order.User.Email;
+
+        var emailSubject = $"Hoàn tiền thành công cho đơn hàng #{order.Id}";
+
+        var emailBody = $@"
+        <h2>Xin chào {customerName},</h2>
+
+        <p>Yêu cầu hoàn tiền cho đơn hàng <strong>#{order.Id}</strong> của bạn đã được xử lý thành công.</p>
+
+        <p><strong>Trạng thái đơn hàng:</strong> Đã hủy</p>
+        <p><strong>Trạng thái thanh toán:</strong> Đã hoàn tiền</p>
+        <p><strong>Thời gian hoàn tiền:</strong> {refund.RefundedAt:dd/MM/yyyy HH:mm}</p>
+
+        <p>Số tiền hoàn lại sẽ được xử lý theo phương thức thanh toán ban đầu của bạn.</p>
+
+        <br/>
+        <p>Trân trọng,<br/>
+        Công ty cổ phần Tech AI Việt Nam</p>
+    ";
+
+        BackgroundJob.Enqueue<IEmailSender>(
+            x => x.SendEmailAsync(customerEmail, emailSubject, emailBody)
+        );
     }
 
     public async Task RejectRefundAsync(long refundId, string reason)

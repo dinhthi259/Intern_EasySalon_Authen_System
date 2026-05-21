@@ -71,9 +71,6 @@ api.interceptors.response.use(
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("roles");
         window.dispatchEvent(new Event("auth-change"));
-        if (window.subiz) {
-          window.subiz("resetCustomer");
-        }
 
         window.location.href = "/login";
         return Promise.reject(err);

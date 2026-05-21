@@ -18,14 +18,6 @@ function GoogleLoginButton() {
       localStorage.setItem("refreshToken", res.data.refreshToken);
       window.dispatchEvent(new Event("auth-change"));
       const user = getUserFromToken();
-      if (window.subiz) {
-        window.subiz("resetCustomer");
-
-        window.subiz("setCustomer", {
-          id: user.userId,
-          email: user.email,
-        });
-      }
 
       notifySuccess("Đăng nhập thành công");
 

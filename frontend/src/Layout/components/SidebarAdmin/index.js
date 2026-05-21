@@ -90,7 +90,7 @@ export default function SidebarAdmin() {
             </NavLink>
 
             <NavLink
-              to="/admin/documents/warehouse-slips"
+              to="/admin/documents/inventory-invoices"
               className={({ isActive }) => cx("subItem", { active: isActive })}
             >
               <FaWarehouse />
