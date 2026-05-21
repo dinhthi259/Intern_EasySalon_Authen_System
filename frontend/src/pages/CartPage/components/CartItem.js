@@ -77,7 +77,7 @@ function CartItem({ item, onUpdate, onRemove, checked, onCheck }) {
           </button>
         </div>
 
-        <p className={cx("stock")}>Còn: {availableQuantity} sản phẩm</p>
+        <p className={cx("stock")}>Còn {availableQuantity} sản phẩm</p>
       </div>
       <button className={cx("remove")} onClick={() => onRemove(item.productId)}>
         <FaTrashCan />
