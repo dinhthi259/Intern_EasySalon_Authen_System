@@ -17,13 +17,13 @@ using Backend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration["DATABASE_URL"];
+var connectionString = builder.Configuration["MYSQL_DATABASE"];
 
 Console.WriteLine("HAS_DB_CONNECTION: " + !string.IsNullOrWhiteSpace(connectionString));
 
 if (string.IsNullOrWhiteSpace(connectionString))
 {
-    throw new Exception("Missing DATABASE_URL");
+    throw new Exception("Missing MYSQL_DATABASE");
 }
 
 var cs = connectionString;
