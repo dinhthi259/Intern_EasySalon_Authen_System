@@ -148,7 +148,7 @@ QUAN TRỌNG:
         sb.AppendLine(
             "===== SẢN PHẨM TÌM THẤY =====");
 
-        foreach (var p in products)
+        foreach (var p in products.Take(3))
         {
             AppendProduct(sb, p);
         }
@@ -209,7 +209,7 @@ PRODUCT_THUMBNAIL: {p.Thumbnail}
 PRICE: {p.DiscountPrice ?? p.Price}
 BRAND: {p.Brand}
 RATING: {p.RatingAvg}
-DESCRIPTION:{Truncate(CleanHtml(p.Description), 120)}
+DESCRIPTION:{Truncate(CleanHtml(p.Description), 60)}
 """);
 
         if (includeSpecs &&

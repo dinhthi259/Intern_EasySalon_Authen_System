@@ -220,23 +220,28 @@ export default function FloatingChatModal({ isOpen, onClose }) {
         };
       }
 
-      // Nếu đã là object
       if (typeof rawMessage === "object") {
         return rawMessage;
       }
 
-      // Remove markdown
       let cleaned = rawMessage
         .replace(/```json/g, "")
         .replace(/```/g, "")
         .trim();
 
-      // Lấy JSON object đầu tiên
       const firstBrace = cleaned.indexOf("{");
-      const lastBrace = cleaned.lastIndexOf("}");
 
-      if (firstBrace !== -1 && lastBrace !== -1) {
-        cleaned = cleaned.substring(firstBrace, lastBrace + 1);
+      if (firstBrace !== -1) {
+        cleaned = cleaned.substring(firstBrace);
+      }
+
+      // FIX JSON bị cắt
+      const openBraces = (cleaned.match(/{/g) || []).length;
+
+      const closeBraces = (cleaned.match(/}/g) || []).length;
+
+      if (openBraces > closeBraces) {
+        cleaned += "}".repeat(openBraces - closeBraces);
       }
 
       return JSON.parse(cleaned);
@@ -245,7 +250,7 @@ export default function FloatingChatModal({ isOpen, onClose }) {
 
       return {
         type: "text",
-        message: rawMessage,
+        message: "AI trả về dữ liệu không hợp lệ.",
         data: null,
       };
     }
