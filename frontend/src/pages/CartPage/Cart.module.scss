@@ -12,11 +12,18 @@
   }
 }
 .stock {
-  margin-top: 6px;
-  font-size: 1.3rem;
-  color: #ff6b00;
-  font-weight: 500;
+  margin-top: 4px;
+  font-size: 1.2rem;
+  color: #888;
+  font-weight: 400;
 }
+
+.quantity-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .cart-item {
   display: flex;
   align-items: center;

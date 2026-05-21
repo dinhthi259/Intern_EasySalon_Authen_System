@@ -30,53 +30,54 @@ function CartItem({ item, onUpdate, onRemove, checked, onCheck }) {
         </div>
       </div>
 
-      <div className={cx("quantity")}>
-        <button
-          className={cx("btn")}
-          onClick={() => {
-            onUpdate(item.productId, item.quantity - 1);
-          }}
-        >
-          −
-        </button>
+      <div className={cx("quantity-wrapper")}>
+        <div className={cx("quantity")}>
+          <button
+            className={cx("btn")}
+            onClick={() => {
+              onUpdate(item.productId, item.quantity - 1);
+            }}
+            disabled={item.quantity <= 1}
+          >
+            −
+          </button>
 
-        <input
-          type="number"
-          value={item.quantity}
-          min={1}
-          max={item.stockQuantity}
-          onChange={(e) => {
-            const value = Number(e.target.value);
+          <input
+            type="number"
+            value={item.quantity}
+            min={1}
+            max={item.stockQuantity}
+            onChange={(e) => {
+              const value = Number(e.target.value);
 
-            if (value > availableQuantity) {
-              notifyWarning("không thể chọn quá số lượng tồn kho");
+              if (value > availableQuantity) {
+                notifyWarning("không thể chọn quá số lượng tồn kho");
 
-              onUpdate(item.productId, availableQuantity);
-              return;
-            }
+                onUpdate(item.productId, availableQuantity);
+                return;
+              }
 
-            onUpdate(item.productId, Math.max(1, value));
-          }}
-        />
+              onUpdate(item.productId, Math.max(1, value));
+            }}
+          />
 
-        <button
-          className={cx("btn")}
-          onClick={() => {
-            if (item.quantity > availableQuantity) {
-              notifyWarning("không thể chọn quá số lượng tồn kho");
-              onUpdate(item.productId, availableQuantity);
-              return;
-            }
+          <button
+            className={cx("btn")}
+            onClick={() => {
+              if (item.quantity > availableQuantity) {
+                notifyWarning("không thể chọn quá số lượng tồn kho");
+                onUpdate(item.productId, availableQuantity);
+                return;
+              }
 
-            onUpdate(item.productId, item.quantity + 1);
-          }}
-        >
-          +
-        </button>
+              onUpdate(item.productId, item.quantity + 1);
+            }}
+          >
+            +
+          </button>
+        </div>
 
-        <p className={cx("stock")}>
-          Còn: {availableQuantity} sản phẩm
-        </p>
+        <p className={cx("stock")}>Còn: {availableQuantity} sản phẩm</p>
       </div>
       <button className={cx("remove")} onClick={() => onRemove(item.productId)}>
         <FaTrashCan />
