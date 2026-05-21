@@ -11,11 +11,13 @@ using PayOS;
 using Hangfire;
 using Hangfire.MySql;
 using MySqlConnector;
-using Hangfire.MySql;
 using Backend.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
 var connectionString =
     builder.Configuration["MYSQL_DATABASE"]
@@ -84,17 +86,17 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddSignalR();
 
-builder.Services.AddSingleton<Fido2>(sp =>
-{
-    return new Fido2(new Fido2Configuration
-    {
-        ServerDomain = "localhost",
-        ServerName = "TechAI",
-        Origins = new HashSet<string> { "http://localhost:3000" }
-    });
-});
+
+// builder.Services.AddSingleton<Fido2>(sp =>
+// {
+//     return new Fido2(new Fido2Configuration
+//     {
+//         ServerDomain = "localhost",
+//         ServerName = "TechAI",
+//         Origins = new HashSet<string> { "http://localhost:3000" }
+//     });
+// });
 
 
 
@@ -182,7 +184,7 @@ app.MapControllers();
 app.MapHub<NotificationHub>("/notificationHub");
 
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 var summaries = new[]
 {
