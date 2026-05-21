@@ -17,7 +17,10 @@ using Backend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration["MYSQL_DATABASE"];
+var connectionString =
+    builder.Configuration["MYSQL_DATABASE"]
+    ?? builder.Configuration["ConnectionStrings:DefaultConnection"]
+    ?? builder.Configuration.GetConnectionString("DefaultConnection");
 
 Console.WriteLine("HAS_DB_CONNECTION: " + !string.IsNullOrWhiteSpace(connectionString));
 
