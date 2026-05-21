@@ -148,7 +148,7 @@ QUAN TRỌNG:
         sb.AppendLine(
             "===== SẢN PHẨM TÌM THẤY =====");
 
-        foreach (var p in products.Take(3))
+        foreach (var p in products.Take(2))
         {
             AppendProduct(sb, p);
         }
