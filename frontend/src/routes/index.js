@@ -139,13 +139,13 @@ const routes = [
   {
     path: "/payment-success",
     component: PaymentSuccessPage,
-    layout: SettingsLayout,
+    layout: DefaultLayout,
     ProtectedRoute: true
   },
   {
     path: "/payment-cancel",
     component: PaymentCancelPage,
-    layout: SettingsLayout,
+    layout: DefaultLayout,
     ProtectedRoute: true
   },
   {
