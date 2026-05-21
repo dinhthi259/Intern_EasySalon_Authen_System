@@ -17,10 +17,14 @@ using Backend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString =
-    builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? builder.Configuration["DATABASE_URL"];
+var connectionString = builder.Configuration["DATABASE_URL"];
+
 Console.WriteLine("HAS_DB_CONNECTION: " + !string.IsNullOrWhiteSpace(connectionString));
+
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new Exception("Missing DATABASE_URL");
+}
 
 var cs = connectionString;
 Console.WriteLine("DB_HOST_TEST: " + cs);
@@ -55,15 +59,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     };
 });
 
-builder.Services.AddHangfire(config =>
-{
-    config.UseStorage(new MySqlStorage(
-    connectionString,
-    new MySqlStorageOptions()
-));
-});
+// builder.Services.AddHangfire(config =>
+// {
+//     config.UseStorage(new MySqlStorage(
+//     connectionString,
+//     new MySqlStorageOptions()
+// ));
+// });
 
-builder.Services.AddHangfireServer();
+// builder.Services.AddHangfireServer();
 
 builder.Services.AddSignalR();
 
@@ -170,7 +174,7 @@ app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.UseHangfireDashboard();
+// app.UseHangfireDashboard();
 
 app.MapHub<NotificationHub>("/notificationHub");
 
