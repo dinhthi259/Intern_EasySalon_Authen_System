@@ -61,12 +61,11 @@ builder.Services.AddSignalR();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("ReactApp", policy =>
+    options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:3000")
+        policy.AllowAnyOrigin()
               .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
+              .AllowAnyMethod();
     });
 });
 
@@ -158,7 +157,7 @@ if (app.Environment.IsDevelopment())
 app.UseStaticFiles();
 app.UseRouting();
 
-app.UseCors("ReactApp");
+app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -7,7 +7,7 @@ import {
   FaSearch,
   FaFileInvoice,
 } from "react-icons/fa";
-import { getAllInvoices } from "../../api/InvoiceApi";
+import { getAllInvoices, getInvoices } from "../../api/InvoiceApi";
 import { GrPowerReset } from "react-icons/gr";
 
 export default function AdminInvoicePage() {
@@ -18,7 +18,7 @@ export default function AdminInvoicePage() {
   const [toDate, setToDate] = useState("");
   const [errors, setErrors] = useState({});
 
-  const API_URL = "http://localhost:5235";
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const fetchInvoices = async () => {
     if (!validateFilter()) return;
@@ -29,8 +29,8 @@ export default function AdminInvoicePage() {
     if (fromDate) params.append("fromDate", fromDate);
     if (toDate) params.append("toDate", toDate);
 
-    const res = await fetch(`${API_URL}/api/admin/invoices?${params}`);
-    const data = await res.json();
+    const res = await getAllInvoices(params);
+    const data = await res.data;
 
     setInvoices(data);
     setSelectedIds([]);
@@ -63,8 +63,8 @@ export default function AdminInvoicePage() {
     setErrors({});
     setSelectedIds([]);
 
-    const res = await fetch(`${API_URL}/api/admin/invoices`);
-    const data = await res.json();
+    const res = await getInvoices();
+    const data = await res.data;
 
     setInvoices(data);
   };
@@ -103,10 +103,13 @@ export default function AdminInvoicePage() {
       return;
     }
 
+    const token = localStorage.getItem("accessToken");
+
     const res = await fetch(`${API_URL}/api/admin/invoices/download-bulk`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(selectedIds),
     });
@@ -133,9 +136,7 @@ export default function AdminInvoicePage() {
     <div className={styles.page}>
       <div className={styles.header}>
         <div>
-          <h2>
-            Quản lý hóa đơn
-          </h2>
+          <h2>Quản lý hóa đơn</h2>
           <p>Danh sách hóa đơn đã gửi cho khách hàng</p>
         </div>
 
@@ -181,7 +182,6 @@ export default function AdminInvoicePage() {
 
           <button className={styles.resetBtn} onClick={resetFilter}>
             <GrPowerReset />
-
           </button>
         </div>
 

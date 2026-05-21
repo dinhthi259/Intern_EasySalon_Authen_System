@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.IO.Compression;
 
+[Authorize(Roles = "ADMIN")]
 [ApiController]
 [Route("api/admin/invoices")]
 public class InvoiceController : ControllerBase

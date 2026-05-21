@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+[Authorize(Roles = "ADMIN")]
 [ApiController]
 [Route("api/tax")]
 public class TaxController : ControllerBase

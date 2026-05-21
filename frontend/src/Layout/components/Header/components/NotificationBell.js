@@ -13,6 +13,7 @@ const cx = classNames.bind(styles);
 function NotificationBell({ userId }) {
   const [notifications, setNotifications] = useState([]);
   const [open, setOpen] = useState(false);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     if (!userId) {
@@ -37,12 +38,13 @@ function NotificationBell({ userId }) {
     if (!userId) return;
 
     const connection = new signalR.HubConnectionBuilder()
-      .withUrl("http://localhost:5235/notificationHub")
+      .withUrl(`${API_URL}/notificationHub`)
       .withAutomaticReconnect()
       .build();
 
     connection.on("ReceiveNotification", (notification) => {
       console.log("Realtime notification nhận được:", notification);
+
       setNotifications((prev) => [notification, ...prev]);
     });
 

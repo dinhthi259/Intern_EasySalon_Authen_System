@@ -1,33 +1,35 @@
 import axios from "axios";
 
-const api = axios.create({ baseURL: "http://localhost:5235/api" });
+const API_URL = import.meta.env.VITE_API_URL;
+
+const api = axios.create({
+  baseURL: `${API_URL}/api`,
+});
 
 let isRefreshing = false;
 let failedQueue = [];
 
 const processQueue = (error, token = null) => {
   failedQueue.forEach((prom) => {
-    if (error) {
-      prom.reject(error);
-    } else {
-      prom.resolve(token);
-    }
+    error ? prom.reject(error) : prom.resolve(token);
   });
 
   failedQueue = [];
 };
 
-// request interceptor
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("accessToken");
-    if (token) config.headers.Authorization = `Bearer ${token}`;
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
     return config;
   },
-  (error) => Promise.reject(error),
+  (error) => Promise.reject(error)
 );
 
-// response interceptor
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -35,7 +37,6 @@ api.interceptors.response.use(
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
-        // Nếu đang refresh → push request vào queue
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         }).then((token) => {
@@ -49,9 +50,10 @@ api.interceptors.response.use(
 
       try {
         const refreshToken = localStorage.getItem("refreshToken");
+
         const res = await axios.post(
-          "http://localhost:5235/api/session/refresh-token",
-          { refreshToken },
+          `${API_URL}/api/session/refresh-token`,
+          { refreshToken }
         );
 
         const newAccessToken = res.data.accessToken;
@@ -59,7 +61,9 @@ api.interceptors.response.use(
 
         localStorage.setItem("accessToken", newAccessToken);
         localStorage.setItem("refreshToken", newRefreshToken);
+
         window.dispatchEvent(new Event("auth-change"));
+
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
         processQueue(null, newAccessToken);
@@ -67,12 +71,15 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (err) {
         processQueue(err, null);
+
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("roles");
+
         window.dispatchEvent(new Event("auth-change"));
 
         window.location.href = "/login";
+
         return Promise.reject(err);
       } finally {
         isRefreshing = false;
@@ -80,7 +87,7 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  },
+  }
 );
 
 export default api;
