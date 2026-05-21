@@ -128,6 +128,10 @@ public class ProductService : IProductService
                 p.CategoryId,
                 CategoryName = p.Category.Name,
                 ParentcategoryId = p.Category.ParentId,
+                StockQuantity = _context.Inventories
+                    .Where(i => i.ProductId == p.Id)
+                    .Select(i => (int?)i.Quantity)
+                    .FirstOrDefault() ?? 0,
 
                 ParentCategoryName = _context.Categories
                     .Where(c => c.Id == p.Category.ParentId)

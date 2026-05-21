@@ -116,8 +116,9 @@
 .rating-brand {
   display: flex;
   align-items: center;
-  gap: 12px; /* khoảng cách giữa rating và brand */
+  gap: 12px;
   margin-top: 0px;
+  flex-wrap: wrap;
 }
 
 /* ===== Rating ===== */
@@ -144,6 +145,42 @@
   font-size: 14px;
   color: var(--text-gray);
   font-weight: 500;
+  position: relative;
+  padding-right: 12px;
+}
+
+/* divider sau brand */
+.brand::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 14px;
+  background: #ddd;
+}
+
+/* ===== Stock Status ===== */
+.stock-status {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* còn hàng */
+.in-stock {
+  background: rgba(34, 197, 94, 0.12);
+  color: #16a34a;
+}
+
+/* hết hàng */
+.out-stock {
+  background: rgba(239, 68, 68, 0.12);
+  color: #dc2626;
 }
 
 /* ===== Banner image (ảnh bạn thêm) ===== */

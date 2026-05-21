@@ -2,7 +2,11 @@ import classNames from "classnames/bind";
 import styles from "../ProductDetail.module.scss";
 import { useEffect, useState } from "react";
 import { addToCart } from "../../../api/CartApi";
-import { notifyError, notifySuccess } from "../../../components/Nofitication";
+import {
+  notifyError,
+  notifySuccess,
+  notifyWarning,
+} from "../../../components/Nofitication";
 import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles);
@@ -21,6 +25,8 @@ export default function ProductInfo({ product }) {
   } = product;
 
   const navigate = useNavigate();
+  const availableQuantity = Math.max(0, (product?.stockQuantity || 0) - 5);
+  const isOutOfStock = availableQuantity <= 0;
 
   const [timeLeft, setTimeLeft] = useState(ONE_HOUR);
 
@@ -51,16 +57,23 @@ export default function ProductInfo({ product }) {
   const handleBuyNow = () => {
     if (!product?.id) return;
 
-    navigate(
-      `/checkout?type=buy-now&productId=${product.id}&quantity=${"1"}`,
-    );
+    if (isOutOfStock) {
+      notifyWarning("Sản phẩm này hiện hết hàng, vui lòng quay lại sau!");
+      return;
+    }
+
+    navigate(`/checkout?type=buy-now&productId=${product.id}&quantity=1`);
   };
 
   const handleAddToCart = async () => {
+    if (isOutOfStock) {
+      notifyWarning("Sản phẩm này hiện hết hàng, vui lòng quay lại sau!");
+      return;
+    }
+
     try {
-      console.log(product.id);
-      // Logic to add product to cart
       const res = await addToCart(product.id, 1);
+
       if (res) {
         notifySuccess("Thêm vào giỏ hàng thành công!");
       }
@@ -74,9 +87,16 @@ export default function ProductInfo({ product }) {
       <p className={cx("name")}>{name}</p>
       <div className={cx("rating-brand")}>
         <div className={cx("rating")}>
-          <span>{`⭐ ${ratingAvg} (${ratingCount} reviews)`}</span>
+          <span>{`⭐ ${averageRating} (${totalReviews} reviews)`}</span>
         </div>
+
         <p className={cx("brand")}>{brand}</p>
+
+        <span
+          className={cx("stock-status", stock > 0 ? "in-stock" : "out-stock")}
+        >
+          {stock > 0 ? "Còn hàng" : "Hết hàng"}
+        </span>
       </div>
 
       <img src="https://cdn2.fptshop.com.vn/unsafe/1080x0/filters:format(webp):quality(75)/507x85_phu_kien_1_cd87d1e516.png"></img>
@@ -88,7 +108,9 @@ export default function ProductInfo({ product }) {
           </span>
 
           <div className={cx("old-price-row")}>
-            <span className={cx("old-price")}>{(price || 0).toLocaleString()}đ</span>
+            <span className={cx("old-price")}>
+              {(price || 0).toLocaleString()}đ
+            </span>
             <span className={cx("discount-percent")}>- {discountPercent}%</span>
           </div>
 
