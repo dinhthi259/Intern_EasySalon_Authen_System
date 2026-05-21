@@ -31,6 +31,7 @@
     <PackageReference Include="payOS" Version="2.1.0" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
     <PackageReference Include="QuestPDF" Version="2026.5.0" />
+    <PackageReference Include="Resend" Version="0.5.1" />
   </ItemGroup>
 
 </Project>

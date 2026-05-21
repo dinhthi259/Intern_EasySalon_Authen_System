@@ -1,31 +1,36 @@
-using System.Net;
-using System.Net.Mail;
-using Microsoft.Extensions.Options;
+using Resend;
 
 public class EmailSender : IEmailSender
 {
-    private readonly GmailOptions _gmailOption;
+    private readonly IResend _resendClient;
+    private readonly string _senderEmail;
 
-    public EmailSender(IOptions<GmailOptions> gmailOption)
+    public EmailSender(IResend resendClient)
     {
-        _gmailOption = gmailOption.Value;
+        _resendClient = resendClient;
+        _senderEmail = "onboarding@resend.dev"; // Sử dụng email mặc định của Resend hoặc thay thế bằng email đã xác thực
     }
 
     public async Task SendEmailAsync(string to, string subject, string body)
     {
-        using MailMessage mailMessage = new MailMessage
+        try
         {
-            From = new MailAddress(_gmailOption.Email),
-            Subject = subject,
-            Body = body,
-            IsBodyHtml = true
-        };
+            var emailRequest = new EmailMessage
+            {
+                From = _senderEmail,
+                To = new[] { to },
+                Subject = subject,
+                HtmlBody = body
+            };
 
-        mailMessage.To.Add(to);
-
-        using var smtpClient = CreateSmtpClient();
-
-        await smtpClient.SendMailAsync(mailMessage);
+            var response = await _resendClient.EmailSendAsync(emailRequest);
+            
+            // If we reach here, the email was sent successfully (response.Content contains the email ID)
+        }
+        catch (ResendException ex)
+        {
+            throw new Exception($"Lỗi gửi email: {ex.Message}");
+        }
     }
 
     public async Task SendEmailWithAttachmentAsync(
@@ -39,35 +44,35 @@ public class EmailSender : IEmailSender
             throw new Exception("Không tìm thấy file hóa đơn để gửi email.");
         }
 
-        using MailMessage mailMessage = new MailMessage
+        try
         {
-            From = new MailAddress(_gmailOption.Email),
-            Subject = subject,
-            Body = body,
-            IsBodyHtml = true
-        };
+            // Đọc file và chuyển đổi thành base64
+            byte[] fileBytes = await File.ReadAllBytesAsync(attachmentPath);
+            string fileName = Path.GetFileName(attachmentPath);
 
-        mailMessage.To.Add(to);
+            var attachment = new EmailAttachment
+            {
+                Filename = fileName,
+                Content = Convert.ToBase64String(fileBytes),
+                ContentType = "application/pdf"
+            };
 
-        Attachment attachment = new Attachment(attachmentPath);
-        mailMessage.Attachments.Add(attachment);
+            var emailRequest = new EmailMessage
+            {
+                From = _senderEmail,
+                To = new[] { to },
+                Subject = subject,
+                HtmlBody = body,
+                Attachments = new List<EmailAttachment> { attachment }
+            };
 
-        using var smtpClient = CreateSmtpClient();
-
-        await smtpClient.SendMailAsync(mailMessage);
-    }
-
-    private SmtpClient CreateSmtpClient()
-    {
-        return new SmtpClient
+            var response = await _resendClient.EmailSendAsync(emailRequest);
+            
+            // If we reach here, the email was sent successfully (response.Content contains the email ID)
+        }
+        catch (ResendException ex)
         {
-            Host = _gmailOption.Host,
-            Port = _gmailOption.Port,
-            Credentials = new NetworkCredential(
-                _gmailOption.Email,
-                _gmailOption.Password
-            ),
-            EnableSsl = true
-        };
+            throw new Exception($"Lỗi gửi email: {ex.Message}");
+        }
     }
 }

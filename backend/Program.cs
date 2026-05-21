@@ -8,10 +8,9 @@ using backend.Services.Interfaces;
 using backend.Repositories;
 using backend.Services;
 using PayOS;
-using Hangfire;
-using Hangfire.MySql;
 using MySqlConnector;
 using Backend.Services;
+using Resend;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,9 +40,6 @@ Console.WriteLine("DB_HOST_TEST: " + cs);
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.Services.Configure<GmailOptions>(
-    builder.Configuration.GetSection(GmailOptions.GmailOptionKey)
-);
 builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(
     connectionString,
     ServerVersion.AutoDetect(connectionString)
@@ -68,15 +64,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     };
 });
 
-builder.Services.AddHangfire(config =>
+builder.Services.AddOptions();
+
+builder.Services.Configure<ResendClientOptions>(o =>
 {
-    config.UseStorage(new MySqlStorage(
-    connectionString,
-    new MySqlStorageOptions()
-));
+    o.ApiToken = Environment.GetEnvironmentVariable("RESEND_APITOKEN");
 });
 
-builder.Services.AddHangfireServer();
+builder.Services.AddHttpClient<ResendClient>();
+builder.Services.AddTransient<IResend, ResendClient>();
+
+
 
 builder.Services.AddSignalR();
 
@@ -189,7 +187,6 @@ app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.UseHangfireDashboard();
 
 app.MapHub<NotificationHub>("/notificationHub");
 
