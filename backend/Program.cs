@@ -86,7 +86,7 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(
         "http://localhost:3000",
-        "https://intern-easy-salon-authen-system-8vwc9o7ki.vercel.app"
+        "https://intern-easy-salon-authen-system.vercel.app"
       )
       .AllowAnyHeader()
       .AllowAnyMethod()
@@ -100,11 +100,11 @@ builder.Services.AddSingleton<Fido2>(sp =>
 {
     return new Fido2(new Fido2Configuration
     {
-        ServerDomain = "intern-easy-salon-authen-system-8vwc9o7ki.vercel.app",
+        ServerDomain = "intern-easy-salon-authen-system.vercel.app",
         ServerName = "TechAI",
         Origins = new HashSet<string>
         {
-            "https://intern-easy-salon-authen-system-8vwc9o7ki.vercel.app"
+            "https://intern-easy-salon-authen-system.vercel.app"
         }
     });
 });
