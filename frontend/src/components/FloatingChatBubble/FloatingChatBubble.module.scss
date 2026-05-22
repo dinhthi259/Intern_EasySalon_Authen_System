@@ -137,33 +137,42 @@
   cursor: pointer;
 }
 
-.sellerChatBox {
-  :global(.str-chat) {
-    height: calc(100% - 52px);
-  }
+.sellerChatBox :global(.str-chat) {
+  height: calc(100% - 52px);
+}
 
-  :global(.str-chat__channel) {
-    height: 100%;
-  }
+.sellerChatBox :global(.str-chat__channel) {
+  height: 100%;
+}
 
-  :global(.str-chat__main-panel) {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
+.sellerChatBox :global(.str-chat__container) {
+  height: 100%;
+}
 
-  :global(.str-chat__list) {
-    flex: 1;
-    height: auto !important;
-    overflow-y: auto;
-  }
+.sellerChatBox :global(.str-chat__main-panel) {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
 
-  :global(.str-chat__message-list) {
-    flex: 1;
-    overflow-y: auto;
-  }
+.sellerChatBox :global(.str-chat__thread) {
+  display: none;
+}
 
-  :global(.str-chat__message-input) {
-    flex-shrink: 0;
-  }
+.sellerChatBox :global(.str-chat__list) {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.sellerChatBox :global(.str-chat__message-list) {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.sellerChatBox :global(.str-chat__message-input) {
+  flex-shrink: 0;
+  position: relative;
+  bottom: auto;
 }
