@@ -23,25 +23,22 @@ function SellerChatBox() {
         const res = await getStreamChatToken();
 
         const userId = String(res.data.userId);
-        const sellerId = "admin_1";
+        const sellerId = String(res.data.sellerId || "admin_1");
+        const channelId = `customer_${userId}`;
 
         chatClient = StreamChat.getInstance(res.data.apiKey);
 
         await chatClient.connectUser(
           {
             id: userId,
-            name: res.data.fullName || "Khách hàng",
+            name: res.data.email || "Khách hàng",
           },
-          res.data.token
+          res.data.token,
         );
 
-        const chatChannel = chatClient.channel(
-          "messaging",
-          `buyer_${userId}_seller_${sellerId}`,
-          {
-            members: [userId, sellerId],
-          }
-        );
+        const chatChannel = chatClient.channel("messaging", channelId, {
+          members: [userId, sellerId],
+        });
 
         await chatChannel.watch();
 
@@ -74,7 +71,12 @@ function SellerChatBox() {
       <Channel channel={channel}>
         <Window>
           <ChannelHeader />
-          <MessageList />
+          <MessageList
+            style={{
+              minHeight: "400px",
+              maxHeight: "400px",
+            }}
+          />
           <MessageComposer />
         </Window>
       </Channel>

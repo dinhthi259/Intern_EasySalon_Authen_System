@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using StreamChat.Clients;
 
 [ApiController]
@@ -6,18 +7,28 @@ using StreamChat.Clients;
 public class StreamChatController : ControllerBase
 {
     private readonly IConfiguration _config;
+    private readonly AppDbContext _context;
 
-    public StreamChatController(IConfiguration config)
+    public StreamChatController(IConfiguration config, AppDbContext context)
     {
         _config = config;
+        _context = context;
     }
 
     [HttpGet("token/{userId}")]
-    public IActionResult GetToken(string userId)
+    public async Task<IActionResult> GetToken(string userId)
     {
         if (string.IsNullOrWhiteSpace(userId))
         {
             return BadRequest("userId không hợp lệ");
+        }
+
+        var user = await _context.Users
+            .FirstOrDefaultAsync(x => x.Id.ToString() == userId);
+
+        if (user == null)
+        {
+            return NotFound("Không tìm thấy user");
         }
 
         var apiKey = _config["Stream:ApiKey"];
@@ -35,7 +46,9 @@ public class StreamChatController : ControllerBase
         {
             apiKey,
             token,
-            userId
+            userId,
+            email = user.Email,
+            sellerId = "admin_1"
         });
     }
     [HttpGet("admin-token")]

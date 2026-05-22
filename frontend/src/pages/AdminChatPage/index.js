@@ -62,9 +62,9 @@ function AdminChatPage() {
   };
 
   return (
-    <div style={{ height: "calc(100vh - 80px)", display: "flex" }}>
+    <div style={{ height: "calc(100vh)", display: "flex" }}>
       <Chat client={client}>
-        <div style={{ width: 320, borderRight: "1px solid #eee" }}>
+        <div style={{ width: 320, borderRight: "1px solid #eee"}}>
           <ChannelList
             filters={filters}
             sort={sort}
