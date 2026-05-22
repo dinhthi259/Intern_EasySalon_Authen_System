@@ -57,19 +57,19 @@ export default function ProductInfo({ product }) {
   const handleBuyNow = () => {
     if (!product?.id) return;
 
-    if (isOutOfStock) {
-      notifyWarning("Sản phẩm này hiện hết hàng, vui lòng quay lại sau!");
-      return;
-    }
+    // if (isOutOfStock) {
+    //   notifyWarning("Sản phẩm này hiện hết hàng, vui lòng quay lại sau!");
+    //   return;
+    // }
 
     navigate(`/checkout?type=buy-now&productId=${product.id}&quantity=1`);
   };
 
   const handleAddToCart = async () => {
-    if (isOutOfStock) {
-      notifyWarning("Sản phẩm này hiện hết hàng, vui lòng quay lại sau!");
-      return;
-    }
+    // if (isOutOfStock) {
+    //   notifyWarning("Sản phẩm này hiện hết hàng, vui lòng quay lại sau!");
+    //   return;
+    // }
 
     try {
       const res = await addToCart(product.id, 1);
