@@ -3,6 +3,7 @@ import classNames from "classnames/bind";
 import styles from "./TaxDeclarationCreate.module.scss";
 import { generateDeclaration } from "../../../api/TaxApi";
 import { notifyError, notifySuccess } from "../../../components/Nofitication";
+import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
@@ -21,6 +22,7 @@ export default function TaxDeclarationCreate({ onCreated }) {
       [e.target.name]: e.target.value,
     });
   };
+  const navigate = useNavigate();
 
   const handleGenerate = async () => {
     const payload = {
@@ -36,6 +38,7 @@ export default function TaxDeclarationCreate({ onCreated }) {
       if (res.success) {
         notifySuccess("Tạo tờ khai thuế thành công!");
         onCreated();
+        navigate("/admin/documents/tax-declarations");
       }
     } catch (error) {
       notifyError(error.res?.data?.message || "Tạo tờ khai thuế thất bại!");

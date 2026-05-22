@@ -4,6 +4,7 @@ import styles from "./TaxDeclarationList.module.scss";
 import { getDeclarations, deleteDeclaration } from "../../../api/TaxApi";
 import ConfirmDialog from "../../../components/ConfirmDialog";
 import { FaTrash } from "react-icons/fa";
+import { notifyError, notifySuccess } from "../../../components/Nofitication";
 
 const cx = classNames.bind(styles);
 
@@ -26,8 +27,16 @@ export default function TaxDeclarationList({ onView }) {
 
   const handleDelete = async (id) => {
     if (id) {
-      await deleteDeclaration(id);
-      setConfirmDelete({ open: false, id: null });
+      try {
+        const res = await deleteDeclaration(id);
+        if (res) {
+          notifySuccess("Xóa tờ khai thuế thành công!");
+          setConfirmDelete({ open: false, id: null });
+          loadData();
+        }
+      } catch (error) {
+        notifyError(error.res?.data?.message || "Xóa tờ khai thuế thất bại!");
+      }
     }
   };
 
