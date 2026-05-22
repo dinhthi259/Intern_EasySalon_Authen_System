@@ -38,6 +38,16 @@ export default function FloatingChatModal({ isOpen, onClose }) {
         setIsLoadingSessions(false);
       }
     };
+    if (!currentSessionId && currentMessages.length === 0) {
+      setCurrentMessages([
+        {
+          role: "assistant",
+          type: "text",
+          message: "Xin chào 👋 Mình là trợ lý mua sắm Tech AI. Mình có thể tư vấn sản phẩm, so sánh cấu hình, gợi ý theo nhu cầu và ngân sách.\n\nNếu bạn muốn gặp nhân viên, hãy nhập: chat với nhân viên.",
+          createdAt: new Date().toISOString(),
+        },
+      ]);
+    }
 
     loadSessions();
   }, [isOpen]);
@@ -76,6 +86,20 @@ export default function FloatingChatModal({ isOpen, onClose }) {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [currentMessages]);
 
+  const isChatWithStaffRequest = (text) => {
+    const normalized = text.toLowerCase().trim();
+
+    return [
+      "chat với nhân viên",
+      "gặp nhân viên",
+      "nói chuyện với nhân viên",
+      "tư vấn viên",
+      "gặp người bán",
+      "chat với người bán",
+      "nhân viên tư vấn",
+    ].some((keyword) => normalized.includes(keyword));
+  };
+
   // Handle send message
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -85,6 +109,27 @@ export default function FloatingChatModal({ isOpen, onClose }) {
     setLoading(true);
     const userMessage = inputValue;
     setInputValue("");
+    if (isChatWithStaffRequest(userMessage)) {
+      const newUserMessage = {
+        role: "user",
+        message: userMessage,
+        createdAt: new Date().toISOString(),
+      };
+
+      const staffMessage = {
+        role: "assistant",
+        type: "text",
+        message: "Mình sẽ kết nối bạn với nhân viên tư vấn ngay bây giờ.",
+        showSellerButton: true,
+        createdAt: new Date().toISOString(),
+      };
+
+      setCurrentMessages((prev) => [...prev, newUserMessage, staffMessage]);
+
+      setShowSellerChat(true);
+      setLoading(false);
+      return;
+    }
 
     // Add user message to UI immediately
     const newUserMessage = {
