@@ -10,6 +10,10 @@ import {
   MessageComposer,
 } from "stream-chat-react";
 import { getStreamChatToken } from "../../api/StreamChatApi";
+import styles from "./SellerChatBox.module.scss"
+import classNames from "classnames/bind";
+
+const cx = classNames.bind(styles)
 
 function SellerChatBox() {
   const [client, setClient] = useState(null);
@@ -70,15 +74,23 @@ function SellerChatBox() {
   }
 
   return (
-    <Chat client={client}>
-      <Channel channel={channel}>
-        <Window>
-          <ChannelHeader />
-          <MessageList />
-          <MessageComposer />
-        </Window>
-      </Channel>
-    </Chat>
+    <div className={cx("seller-chat-wrapper")}>
+      <Chat client={client}>
+        <Channel channel={channel}>
+          <Window>
+            <ChannelHeader />
+
+            <div className={cx("message-list-wrapper")}>
+              <MessageList />
+            </div>
+
+            <div className={cx("message-input-wrapper")}>
+              <MessageComposer />
+            </div>
+          </Window>
+        </Channel>
+      </Chat>
+    </div>
   );
 }
 

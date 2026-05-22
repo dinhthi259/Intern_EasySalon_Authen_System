@@ -107,8 +107,8 @@
 
 .sellerChatBox {
   position: fixed;
-  right: 24px;
-  bottom: 24px;
+  right: 0px;
+  bottom: 0px;
   width: 500px;
   max-width: calc(100vw - 32px);
   height: 560px;
@@ -131,59 +131,59 @@
   font-weight: 600;
 }
 
-.sellerChatHeader button {
-  border: none;
-  background: transparent;
-  color: #fff;
-  font-size: 24px;
-  cursor: pointer;
-}
+// .sellerChatHeader button {
+//   border: none;
+//   background: transparent;
+//   color: #fff;
+//   font-size: 24px;
+//   cursor: pointer;
+// }
 
-.sellerChatBox :global(.str-chat) {
-  height: calc(100% - 52px);
-}
+// .sellerChatBox :global(.str-chat) {
+//   height: calc(100% - 52px);
+// }
 
-.sellerChatBox :global(.str-chat__channel),
-.sellerChatBox :global(.str-chat__container),
-.sellerChatBox :global(.str-chat__main-panel) {
-  height: 100%;
-}
+// .sellerChatBox :global(.str-chat__channel),
+// .sellerChatBox :global(.str-chat__container),
+// .sellerChatBox :global(.str-chat__main-panel) {
+//   height: 100%;
+// }
 
-.sellerChatBox :global(.str-chat__main-panel) {
-  display: flex;
-  flex-direction: column;
-}
+// .sellerChatBox :global(.str-chat__main-panel) {
+//   display: flex;
+//   flex-direction: column;
+// }
 
-.sellerChatBox :global(.str-chat__list),
-.sellerChatBox :global(.str-chat__message-list) {
-  height: 350px !important;
-  max-height: 350px !important;
-  min-height: 350px !important;
-  overflow-y: auto !important;
-  flex: 0 0 350px !important;
-}
+// .sellerChatBox :global(.str-chat__list),
+// .sellerChatBox :global(.str-chat__message-list) {
+//   height: 350px !important;
+//   max-height: 350px !important;
+//   min-height: 350px !important;
+//   overflow-y: auto !important;
+//   flex: 0 0 350px !important;
+// }
 
-.sellerChatBox :global(.str-chat__message-input),
-.sellerChatBox :global(.str-chat__message-input-react) {
-  flex-shrink: 0 !important;
-  position: relative !important;
-  bottom: auto !important;
-  background: #fff;
-}
+// .sellerChatBox :global(.str-chat__message-input),
+// .sellerChatBox :global(.str-chat__message-input-react) {
+//   flex-shrink: 0 !important;
+//   position: relative !important;
+//   bottom: auto !important;
+//   background: #fff;
+// }
 
-@media (max-width: 576px) {
-  .sellerChatBox {
-    right: 12px;
-    bottom: 12px;
-    width: calc(100vw - 24px);
-    height: 520px;
-  }
+// @media (max-width: 576px) {
+//   .sellerChatBox {
+//     right: 12px;
+//     bottom: 12px;
+//     width: calc(100vw - 24px);
+//     height: 520px;
+//   }
 
-  .sellerChatBox :global(.str-chat__list),
-  .sellerChatBox :global(.str-chat__message-list) {
-    height: 300px !important;
-    max-height: 300px !important;
-    min-height: 300px !important;
-    flex-basis: 300px !important;
-  }
-}
+//   .sellerChatBox :global(.str-chat__list),
+//   .sellerChatBox :global(.str-chat__message-list) {
+//     height: 300px !important;
+//     max-height: 300px !important;
+//     min-height: 300px !important;
+//     flex-basis: 300px !important;
+//   }
+// }
