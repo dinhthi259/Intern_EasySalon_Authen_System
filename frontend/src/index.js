@@ -4,6 +4,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import GlobalStyles from './components/GlobalStyles';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import "stream-chat-react/dist/css/index.css";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

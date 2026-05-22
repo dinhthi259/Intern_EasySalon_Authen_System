@@ -17,6 +17,7 @@ import {
   FaChevronRight,
 } from "react-icons/fa";
 import { BiSolidCommentDetail } from "react-icons/bi";
+import { IoIosChatbubbles } from "react-icons/io";
 
 const cx = classNames.bind(styles);
 
@@ -32,6 +33,7 @@ export default function SidebarAdmin() {
     { name: "Quản lý khách hàng", path: "/admin/customers", icon: <FaUsers /> },
     { name: "Quản lý nhà cung cấp", path: "/admin/suppliers", icon: <FaTruck /> },
     { name: "Quản lý đánh giá", path: "/admin/review", icon: <BiSolidCommentDetail /> },
+    { name: "Phản hồi khách hàng", path: "/admin/chat", icon: <IoIosChatbubbles /> },
     { name: "Báo cáo thống kê", path: "/admin/dashboard", icon: <FaChartBar /> },
   ];
 

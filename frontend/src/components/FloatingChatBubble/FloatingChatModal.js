@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import classNames from "classnames/bind";
 import styles from "./FloatingChatModal.module.scss";
 import { FaTimes } from "react-icons/fa";
+import SellerChatBox from "./SellerChatBox";
 import {
   sendMessage,
   getUserSessions,
@@ -20,6 +21,7 @@ export default function FloatingChatModal({ isOpen, onClose }) {
   const [isLoadingSessions, setIsLoadingSessions] = useState(true);
   const [showSidebar, setShowSidebar] = useState(false);
   const messagesEndRef = useRef(null);
+  const [showSellerChat, setShowSellerChat] = useState(false);
 
   // Load user sessions
   useEffect(() => {
@@ -132,7 +134,9 @@ export default function FloatingChatModal({ isOpen, onClose }) {
       // Show error message
       const errorMessage = {
         role: "assistant",
+        type: "text",
         message: "Xin lỗi, đã xảy ra lỗi. Vui lòng thử lại.",
+        showSellerButton: true,
         createdAt: new Date().toISOString(),
       };
       setCurrentMessages((prev) => [...prev, errorMessage]);
@@ -147,6 +151,7 @@ export default function FloatingChatModal({ isOpen, onClose }) {
     setCurrentMessages([]);
     setInputValue("");
     setShowSidebar(false);
+    setShowSellerChat(false);
   };
 
   // Handle select session
@@ -390,7 +395,20 @@ export default function FloatingChatModal({ isOpen, onClose }) {
       );
     }
 
-    return <p>{msg.message}</p>;
+    return (
+      <>
+        <p>{msg.message}</p>
+
+        {msg.showSellerButton && (
+          <button
+            className={cx("chatSellerBtn")}
+            onClick={() => setShowSellerChat(true)}
+          >
+            Chat với nhân viên
+          </button>
+        )}
+      </>
+    );
   };
 
   return (
@@ -524,6 +542,16 @@ export default function FloatingChatModal({ isOpen, onClose }) {
             </form>
           </div>
         </div>
+        {showSellerChat && (
+          <div className={cx("sellerChatBox")}>
+            <div className={cx("sellerChatHeader")}>
+              <span>Chat với nhân viên</span>
+              <button onClick={() => setShowSellerChat(false)}>×</button>
+            </div>
+
+            <SellerChatBox />
+          </div>
+        )}
       </div>
     </div>
   );

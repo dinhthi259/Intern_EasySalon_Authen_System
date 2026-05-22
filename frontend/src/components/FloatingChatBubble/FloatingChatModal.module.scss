@@ -382,10 +382,33 @@
   }
 }
 
+.chatSellerBtn {
+  margin-top: 10px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #59c241, #46a832);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(89, 194, 65, 0.35);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
 .productCards {
   display: grid;
   gap: 16px;
 }
+
 
 .productCard {
   background: #fff;
