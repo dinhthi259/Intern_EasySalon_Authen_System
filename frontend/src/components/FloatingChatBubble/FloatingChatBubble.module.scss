@@ -107,12 +107,14 @@
 
 .sellerChatBox {
   position: fixed;
-  bottom: 0;
-  right: 0;
+  right: 24px;
+  bottom: 24px;
   width: 500px;
-  height: 640px;
+  max-width: calc(100vw - 32px);
+  height: 560px;
+  max-height: calc(100vh - 48px);
   background: #fff;
-  border-radius: 18px 18px 0 0;
+  border-radius: 18px;
   overflow: hidden;
   z-index: 9999;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
@@ -141,38 +143,47 @@
   height: calc(100% - 52px);
 }
 
-.sellerChatBox :global(.str-chat__channel) {
-  height: 100%;
-}
-
-.sellerChatBox :global(.str-chat__container) {
+.sellerChatBox :global(.str-chat__channel),
+.sellerChatBox :global(.str-chat__container),
+.sellerChatBox :global(.str-chat__main-panel) {
   height: 100%;
 }
 
 .sellerChatBox :global(.str-chat__main-panel) {
-  height: 100%;
   display: flex;
   flex-direction: column;
 }
 
-.sellerChatBox :global(.str-chat__thread) {
-  display: none;
-}
-
-.sellerChatBox :global(.str-chat__list) {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-}
-
+.sellerChatBox :global(.str-chat__list),
 .sellerChatBox :global(.str-chat__message-list) {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
+  height: 350px !important;
+  max-height: 350px !important;
+  min-height: 350px !important;
+  overflow-y: auto !important;
+  flex: 0 0 350px !important;
 }
 
-.sellerChatBox :global(.str-chat__message-input) {
-  flex-shrink: 0;
-  position: relative;
-  bottom: auto;
+.sellerChatBox :global(.str-chat__message-input),
+.sellerChatBox :global(.str-chat__message-input-react) {
+  flex-shrink: 0 !important;
+  position: relative !important;
+  bottom: auto !important;
+  background: #fff;
+}
+
+@media (max-width: 576px) {
+  .sellerChatBox {
+    right: 12px;
+    bottom: 12px;
+    width: calc(100vw - 24px);
+    height: 520px;
+  }
+
+  .sellerChatBox :global(.str-chat__list),
+  .sellerChatBox :global(.str-chat__message-list) {
+    height: 300px !important;
+    max-height: 300px !important;
+    min-height: 300px !important;
+    flex-basis: 300px !important;
+  }
 }
