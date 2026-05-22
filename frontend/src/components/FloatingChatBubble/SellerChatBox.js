@@ -74,12 +74,7 @@ function SellerChatBox() {
       <Channel channel={channel}>
         <Window>
           <ChannelHeader />
-          <MessageList
-            style={{
-              minHeight: "400px",
-              maxHeight: "400px",
-            }}
-          />
+          <MessageList />
           <MessageComposer />
         </Window>
       </Channel>
