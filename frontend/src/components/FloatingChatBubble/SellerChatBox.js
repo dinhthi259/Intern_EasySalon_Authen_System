@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { StreamChat } from "stream-chat";
+import { getUserFromToken } from "../../helper/JwtDecodeHelper";
 import {
   Chat,
   Channel,
@@ -13,14 +14,18 @@ import { getStreamChatToken } from "../../api/StreamChatApi";
 function SellerChatBox() {
   const [client, setClient] = useState(null);
   const [channel, setChannel] = useState(null);
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
     let chatClient;
     let isMounted = true;
+    const user = getUserFromToken();
+    setUserId(user?.userId || null);
+    
 
     const init = async () => {
       try {
-        const res = await getStreamChatToken();
+        const res = await getStreamChatToken(userId);
 
         const userId = String(res.data.userId);
         const sellerId = String(res.data.sellerId || "admin_1");
