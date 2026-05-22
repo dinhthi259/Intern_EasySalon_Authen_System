@@ -35,7 +35,7 @@ export default function TaxDeclarationCreate({ onCreated }) {
 
     try {
       const res = await generateDeclaration(payload);
-      if (res.success) {
+      if (res) {
         notifySuccess("Tạo tờ khai thuế thành công!");
         onCreated();
         navigate("/admin/documents/tax-declarations");
