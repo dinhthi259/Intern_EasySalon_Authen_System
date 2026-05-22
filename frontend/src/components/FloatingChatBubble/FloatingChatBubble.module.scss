@@ -109,10 +109,10 @@
   position: fixed;
   bottom: 0;
   right: 0;
-  min-width: 500px;
-  min-height: 600px;
+  width: 500px;
+  height: 640px;
   background: #fff;
-  border-radius: 18px;
+  border-radius: 18px 18px 0 0;
   overflow: hidden;
   z-index: 9999;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
@@ -135,4 +135,35 @@
   color: #fff;
   font-size: 24px;
   cursor: pointer;
+}
+
+.sellerChatBox {
+  :global(.str-chat) {
+    height: calc(100% - 52px);
+  }
+
+  :global(.str-chat__channel) {
+    height: 100%;
+  }
+
+  :global(.str-chat__main-panel) {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  :global(.str-chat__list) {
+    flex: 1;
+    height: auto !important;
+    overflow-y: auto;
+  }
+
+  :global(.str-chat__message-list) {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  :global(.str-chat__message-input) {
+    flex-shrink: 0;
+  }
 }
