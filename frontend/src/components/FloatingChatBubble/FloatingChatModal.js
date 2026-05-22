@@ -12,7 +12,11 @@ import {
 
 const cx = classNames.bind(styles);
 
-export default function FloatingChatModal({ isOpen, onClose }) {
+export default function FloatingChatModal({
+  isOpen,
+  onClose,
+  onOpenSellerChat,
+}) {
   const [sessions, setSessions] = useState([]);
   const [currentSessionId, setCurrentSessionId] = useState(null);
   const [currentMessages, setCurrentMessages] = useState([]);
@@ -43,7 +47,8 @@ export default function FloatingChatModal({ isOpen, onClose }) {
         {
           role: "assistant",
           type: "text",
-          message: "Xin chào 👋 Mình là trợ lý mua sắm Tech AI. Mình có thể tư vấn sản phẩm, so sánh cấu hình, gợi ý theo nhu cầu và ngân sách.\n\nNếu bạn muốn gặp nhân viên, hãy nhập: chat với nhân viên.",
+          message:
+            "Xin chào 👋 Mình là trợ lý mua sắm Tech AI. Mình có thể tư vấn sản phẩm, so sánh cấu hình, gợi ý theo nhu cầu và ngân sách.\n\nNếu bạn muốn gặp nhân viên, hãy nhập: chat với nhân viên.",
           createdAt: new Date().toISOString(),
         },
       ]);
@@ -126,7 +131,7 @@ export default function FloatingChatModal({ isOpen, onClose }) {
 
       setCurrentMessages((prev) => [...prev, newUserMessage, staffMessage]);
 
-      setShowSellerChat(true);
+      onOpenSellerChat();
       setLoading(false);
       return;
     }
@@ -447,7 +452,7 @@ export default function FloatingChatModal({ isOpen, onClose }) {
         {msg.showSellerButton && (
           <button
             className={cx("chatSellerBtn")}
-            onClick={() => setShowSellerChat(true)}
+            onClick={onOpenSellerChat}
           >
             Chat với nhân viên
           </button>
